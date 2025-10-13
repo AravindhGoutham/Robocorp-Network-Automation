@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Health Results</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* ---------- Unified Dark Theme ---------- */
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      margin-top: 60px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      padding: 40px 60px;
+      width: 90%;
+      max-width: 1000px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00bfff;
+      font-size: 2em;
+      margin-bottom: 40px;
+      text-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+    }
+
+    .section {
+      margin-bottom: 30px;
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(0, 191, 255, 0.4);
+    }
+
+    .section-header {
+      background: rgba(0, 191, 255, 0.2);
+      padding: 15px 20px;
+      border-radius: 12px 12px 0 0;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #fff;
+      border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+    }
+
+    .section-content {
+      padding: 15px 20px;
+      font-family: monospace;
+      font-size: 0.95em;
+      white-space: pre-wrap;
+      color: #b8e3ff;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 0 0 12px 12px;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .back-link a {
+      color: #00bfff;
+      text-decoration: none;
+      font-size: 1em;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Network Health Results for {{ device_ip }}</h2>
+
+    {% for check, output in results.items() %}
+    <div class="section">
+      <div class="section-header">{{ check }}</div>
+      <div class="section-content">{{ output | safe }}</div>
+    </div>
+    {% endfor %}
+
+    <div class="back-link">
+      <a href="/healthcheck">← Back to Health Check</a>
+    </div>
+  </div>
+</body>
+</html>

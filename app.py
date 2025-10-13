@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 from jinja2 import Environment, FileSystemLoader
 from netmiko import ConnectHandler
 from datetime import datetime
+from healthcheck import run_health_check
 import yaml, os
 
 app = Flask(__name__)
@@ -25,6 +26,19 @@ def index():
 def add_device():
     return render_template("add_device.html")
 
+
+@app.route("/healthcheck", methods=["GET", "POST"])
+def healthcheck():
+    with open("devices.yaml") as f:
+        devices = yaml.safe_load(f)
+
+    if request.method == "POST":
+        ip = request.form.get("device_ip")
+        results = run_health_check(ip)
+        return render_template("health_results.html", ip=ip, results=results)
+
+    # GET — show dropdown of available devices
+    return render_template("healthcheck.html", devices=devices)
 
 # Generate Configuration
 @app.route("/generate", methods=["POST"])

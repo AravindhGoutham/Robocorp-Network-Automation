@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Health Check</title>
+	  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<style>
+	  body {
+	    font-family: "Segoe UI", Roboto, sans-serif;
+	    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+	    color: #fff;
+	    margin: 0;
+	    padding: 0;
+	    height: 100vh;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	  }
+
+	  .container {
+	    background: rgba(255, 255, 255, 0.05);
+	    padding: 50px 70px;
+	    border-radius: 18px;
+	    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+	    backdrop-filter: blur(12px);
+	    text-align: center;
+	    max-width: 650px;
+	    width: 90%;
+	    animation: fadeIn 0.6s ease;
+	  }
+
+	  h2 {
+	    color: #00bfff;
+	    font-size: 1.9em;
+	    margin-bottom: 40px;
+	    text-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    gap: 10px;
+	  }
+
+	  h2::before {
+	    content: "🔍";
+	  }
+
+	  /* ✅ Remove white box background */
+	  form {
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    gap: 15px;
+	    flex-wrap: wrap;
+	    margin-bottom: 30px;
+	    background: transparent !important;   /* <— FORCE remove white */
+	    box-shadow: none !important;
+	    border: none !important;
+	  }
+
+	  form * {
+	    background: transparent !important;
+	  }
+
+	  select {
+	    padding: 10px 15px;
+	    border-radius: 8px;
+	    border: 1px solid #00bfff;
+	    background: rgba(0, 0, 0, 0.4);
+	    color: #fff;
+	    font-size: 1em;
+	    outline: none;
+	    transition: all 0.3s ease;
+	  }
+
+	  select:hover,
+	  select:focus {
+	    border-color: #66d9ff;
+	    box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+	  }
+
+	  button {
+	    background: linear-gradient(90deg, #00bfff, #00eaff);
+	    color: #111;
+	    border: none;
+	    padding: 10px 25px;
+	    border-radius: 8px;
+	    font-weight: 600;
+	    font-size: 1em;
+	    cursor: pointer;
+	    transition: all 0.3s ease;
+	    box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+	  }
+
+	  button:hover {
+	    background: #00d4ff;
+	    transform: translateY(-2px);
+	    box-shadow: 0 0 25px rgba(0, 191, 255, 0.7);
+	  }
+
+	  .back-link {
+	    margin-top: 20px;
+	  }
+
+	  .back-link a {
+	    color: #00bfff;
+	    text-decoration: none;
+	    font-size: 0.95em;
+	  }
+
+	  .back-link a:hover {
+	    text-decoration: underline;
+	  }
+
+	  @keyframes fadeIn {
+	    from { opacity: 0; transform: translateY(-10px); }
+	    to { opacity: 1; transform: translateY(0); }
+	  }
+	</style>
+
+</head>
+
+<body>
+  <div class="container">
+    <h2>Run Network Health Check</h2>
+
+    <form method="POST">
+      <select name="device_ip" required>
+        {% for device in devices %}
+          <option value="{{ device.host }}">{{ device.host }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Run Health Check</button>
+    </form>
+
+    <div class="back-link">
+      <a href="/">← Back to Dashboard</a>
+    </div>
+  </div>
+</body>
+</html>
