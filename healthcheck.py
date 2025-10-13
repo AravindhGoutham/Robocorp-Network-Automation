@@ -50,7 +50,8 @@ def run_health_check(ip):
         "IP Route": "show ip route",
         "OSPF Neighbors": "show ip ospf neighbor",
         "BGP Summary": "show ip bgp summary",
-   	    "Interface Status": "show ip int brief"
+        "Interface Status": "show ip int brief",
+	"Webserver Reachablility": "ping 8.8.8.8"
     }
 
     table = Table(

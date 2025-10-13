@@ -1,0 +1,13 @@
+{% if static_routes %}
+! IPv4 Static Routes
+{% for route in static_routes %}
+ip route {{ route.destination }} {{ route.mask }} {{ route.next_hop }}
+{% endfor %}
+{% endif %}
+
+{% if static_routes_v6 %}
+! IPv6 Static Routes
+{% for route in static_routes_v6 %}
+ipv6 route {{ route.destination }} {{ route.next_hop }}
+{% endfor %}
+{% endif %}

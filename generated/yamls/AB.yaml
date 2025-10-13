@@ -1,0 +1,30 @@
+hostname: AB
+username: admin
+password: admin
+interfaces:
+- name: ethernet 2
+  switchport_mode: 'no'
+  vlan: null
+  ipv4: 2.0.0.1/30
+  ipv6: null
+vlans: []
+routing:
+  ospf:
+    enabled: false
+    process_id: ''
+    networks: []
+  rip:
+    enabled: false
+    networks: []
+  bgp:
+    enabled: false
+    as_number: ''
+    neighbors: []
+    networks: []
+static_routes:
+- destination: 8.8.8.8
+  mask: 255.255.255.255
+  next_hop: 10.0.0.1
+static_routes_v6:
+- destination: 2001:ab::/64
+  next_hop: 2001:db8::2

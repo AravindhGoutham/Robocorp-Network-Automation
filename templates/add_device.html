@@ -156,7 +156,7 @@
       container.appendChild(div);
     }
 
-    // Add Interface
+    // Interface
     function addInterface() {
       addField("interfaces", `
         <div class="interface-item">
@@ -175,7 +175,7 @@
       `);
     }
 
-    // Add VLAN
+    // VLAN
     function addVlan() {
       addField("vlans", `
         <div class="vlan-item">
@@ -186,30 +186,30 @@
       `);
     }
 
-    // Add OSPF network
+    // OSPF
     function addOspfNetwork() {
       addField("ospf_networks", `
-        <div class="ospf-net-item">
+        <div>
           Network: <input name="ospf_network[]">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);
     }
 
-    // Add RIP network
+    // RIP
     function addRipNetwork() {
       addField("rip_networks", `
-        <div class="rip-net-item">
+        <div>
           Network: <input name="rip_network[]">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);
     }
 
-    // Add BGP neighbor
+    // BGP
     function addBgpNeighbor() {
       addField("bgp_neighbors", `
-        <div class="bgp-neigh-item">
+        <div>
           Neighbor IP: <input name="bgp_neigh_ip[]">
           Remote-AS: <input name="bgp_neigh_as[]">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
@@ -217,11 +217,33 @@
       `);
     }
 
-    // Add BGP network
     function addBgpNetwork() {
       addField("bgp_networks", `
-        <div class="bgp-net-item">
+        <div>
           Network: <input name="bgp_network[]" placeholder="10.0.0.0 255.255.255.0">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+
+    // Static Route (IPv4)
+    function addStaticRoute() {
+      addField("static_routes", `
+        <div>
+          Destination: <input name="static_dest[]" placeholder="192.168.10.0">
+          Mask: <input name="static_mask[]" placeholder="255.255.255.0">
+          Next Hop: <input name="static_nh[]" placeholder="10.0.0.2">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+
+    // IPv6 Static Route
+    function addStaticRouteV6() {
+      addField("static_routes_v6", `
+        <div>
+          Destination: <input name="staticv6_dest[]" placeholder="2001:db8:1::/64">
+          Next Hop: <input name="staticv6_nh[]" placeholder="2001:db8::2">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);
@@ -290,6 +312,24 @@
         <button type="button" onclick="addBgpNeighbor()">+ Add Neighbor</button>
         <div id="bgp_networks"></div>
         <button type="button" onclick="addBgpNetwork()">+ Add Network</button>
+      </div>
+    </div>
+
+    <!-- Static Routes -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">Static Routes (IPv4)</button>
+      <div class="accordion-content">
+        <div id="static_routes"></div>
+        <button type="button" onclick="addStaticRoute()">+ Add Route</button>
+      </div>
+    </div>
+
+    <!-- IPv6 Static Routes -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">Static Routes (IPv6)</button>
+      <div class="accordion-content">
+        <div id="static_routes_v6"></div>
+        <button type="button" onclick="addStaticRouteV6()">+ Add Route</button>
       </div>
     </div>
 
