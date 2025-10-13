@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Config Diff Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      font-family: monospace;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.2);
+      backdrop-filter: blur(8px);
+    }
+    h2 {
+      text-align: center;
+      color: #00bfff;
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+    }
+    pre {
+      background: rgba(0, 0, 0, 0.3);
+      color: #b8e3ff;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .added { color: #00ff88; }    /* Green for added lines */
+    .removed { color: #ff5555; }  /* Red for removed lines */
+    .context { color: #999; }     /* Grey for unchanged lines */
+    a {
+      color: #00bfff;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Config Difference for {{ device_ip }}</h2>
+    <pre>
+{% for line in diff_output.splitlines() %}
+  {% if line.startswith('+') and not line.startswith('+++') %}
+<span class="added">{{ line }}</span>
+  {% elif line.startswith('-') and not line.startswith('---') %}
+<span class="removed">{{ line }}</span>
+  {% else %}
+<span class="context">{{ line }}</span>
+  {% endif %}
+{% endfor %}
+    </pre>
+    <a href="/config_diff">← Back to Compare Page</a>
+  </div>
+</body>
+</html>

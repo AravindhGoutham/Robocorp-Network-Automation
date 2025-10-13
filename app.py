@@ -5,6 +5,7 @@ from netmiko import ConnectHandler
 from datetime import datetime
 from healthcheck import run_health_check
 import yaml, os
+from diff import compare_config_diff
 
 app = Flask(__name__)
 env = Environment(loader=FileSystemLoader("templates"))
@@ -20,6 +21,25 @@ os.makedirs(CONFIG_DIR, exist_ok=True)
 def index():
     return render_template("index.html")
 
+@app.route("/config_diff", methods=["GET", "POST"])
+def config_diff():
+    with open("devices.yaml") as f:
+        devices = yaml.safe_load(f)
+
+    if request.method == "POST":
+        device_ip = request.form.get("device_ip")
+        try:
+            diff_output = compare_config_diff(device_ip)
+            return render_template(
+                "config_diff_result.html",
+                device_ip=device_ip,
+                diff_output=diff_output
+            )
+        except Exception as e:
+            return f"<h3 style='color:red;'>Error: {e}</h3>"
+
+    # For GET requests — show the form
+    return render_template("config_diff.html", devices=devices)
 
 # Add Device Form Page
 @app.route("/add_device")

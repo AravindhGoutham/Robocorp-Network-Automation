@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Compare Configs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0, 191, 255, 0.25);
+      padding: 50px 70px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    h2 {
+      color: #00bfff;
+      font-size: 1.8em;
+      margin-bottom: 25px;
+      text-shadow: 0 0 15px rgba(0, 191, 255, 0.7);
+    }
+
+    select, button {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #00bfff;
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      font-size: 1em;
+      margin: 10px;
+      transition: 0.3s;
+      outline: none;
+    }
+
+    select:focus {
+      border-color: #66d9ff;
+      box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+    }
+
+    button {
+      background: linear-gradient(90deg, #00bfff, #00e0ff);
+      color: #111;
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #33d1ff, #66f2ff);
+      transform: translateY(-2px);
+    }
+
+    a {
+      color: #00bfff;
+      text-decoration: none;
+      display: block;
+      margin-top: 25px;
+      font-size: 0.95em;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Compare Running Config vs Golden Config</h2>
+    <form method="POST">
+      <select name="device_ip" id="device_ip">
+        {% for d in devices %}
+        <option value="{{ d.host }}">{{ d.host }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Run Comparison</button>
+    </form>
+    <a href="/">← Back to Dashboard</a>
+  </div>
+</body>
+</html>
