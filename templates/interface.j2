@@ -1,0 +1,30 @@
+{% if interfaces %}
+! Interface Configuration
+config t
+{% for intf in interfaces %}
+interface {{ intf.name }}
+{% if intf.switchport_mode == 'access' %}
+ switchport
+ switchport access vlan {{ intf.vlan }}
+{% elif intf.switchport_mode == 'trunk' %}
+ switchport
+ switchport mode trunk
+ switchport trunk allowed vlan all
+{% elif intf.switchport_mode == 'no' %}
+ no switchport
+{% else %}
+ ! No switchport mode defined
+{% endif %}
+
+{% if intf.ipv4 %}
+ ip address {{ intf.ipv4 }}
+{% endif %}
+
+{% if intf.ipv6 %}
+ ipv6 address {{ intf.ipv6 }}
+{% endif %}
+{% endfor %}
+end
+{% else %}
+! No interface configuration
+{% endif %}

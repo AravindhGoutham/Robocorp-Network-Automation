@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Golden Configs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* ---------- Dark Themed Page ---------- */
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      margin-top: 60px;
+      color: #00bfff;
+      letter-spacing: 1px;
+      font-size: 2em;
+      text-align: center;
+    }
+
+    /* ---------- Table Styling ---------- */
+    table {
+      margin-top: 30px;
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 1000px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.2);
+      backdrop-filter: blur(6px);
+    }
+
+    th, td {
+      padding: 14px 18px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+      background: rgba(0, 191, 255, 0.3);
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9em;
+      letter-spacing: 1px;
+    }
+
+    tr:hover {
+      background: rgba(0, 191, 255, 0.15);
+      transition: 0.2s ease;
+    }
+
+    /* ---------- Button Styling ---------- */
+    .menu-item {
+      display: inline-block;
+      text-decoration: none;
+      color: #fff;
+      background: rgba(0, 191, 255, 0.2);
+      border: 1px solid #00bfff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.95em;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+    }
+
+    .menu-item:hover {
+      background: #00bfff;
+      color: #111;
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.7);
+    }
+
+    /* ---------- Back Link ---------- */
+    .back-link {
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    .back-link a {
+      color: #00bfff;
+      text-decoration: none;
+      font-size: 1em;
+      transition: 0.2s ease;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      table {
+        width: 95%;
+        font-size: 0.9em;
+      }
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Golden Configs</h2>
+
+  <table>
+    <tr>
+      <th>Host</th>
+      <th>Device Type</th>
+      <th>Username</th>
+      <th>Action</th>
+    </tr>
+    {% for dev in devices %}
+    <tr>
+      <td>{{ dev.host }}</td>
+      <td>{{ dev.device_type }}</td>
+      <td>{{ dev.current_username }}</td>
+      <td>
+        <a href="/fetch_config/{{ dev.host }}" class="menu-item">Fetch Running Config</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <div class="back-link">
+    <a href="/">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

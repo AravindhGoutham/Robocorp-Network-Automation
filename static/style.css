@@ -1,0 +1,120 @@
+/* General page layout */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header title */
+h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 20px;
+}
+
+/* Main form container */
+form {
+  width: 90%;
+  max-width: 900px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Section boxes (VLAN, Interface, etc.) */
+.section {
+  border: 1px solid #dce1e7;
+  border-left: 5px solid #3498db;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #fafbfc;
+}
+
+.section h3 {
+  margin-top: 0;
+  color: #2980b9;
+  border-bottom: 1px solid #d0d7de;
+  padding-bottom: 5px;
+  font-size: 1.1em;
+}
+
+/* Input fields */
+input[type="text"],
+input[type="password"],
+select {
+  margin: 5px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  border: 1px solid #cdd3d8;
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 3px #3498db;
+}
+
+/* Add buttons (+ Add Interface, + Add VLAN, etc.) */
+button {
+  background-color: #3498db;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 6px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Submit button */
+input[type="submit"] {
+  display: block;
+  width: 100%;
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  padding: 10px 0;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+input[type="submit"]:hover {
+  background-color: #27ae60;
+}
+
+/* Output page formatting */
+pre {
+  background-color: #f0f3f6;
+  border: 1px solid #dce1e7;
+  padding: 15px;
+  border-radius: 6px;
+  font-family: Consolas, monospace;
+  font-size: 14px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

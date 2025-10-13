@@ -1,0 +1,12 @@
+{% if routing.rip is defined and routing.rip.enabled %}
+! RIP Configuration
+config t
+router rip
+{% for net in routing.rip.networks %}
+ network {{ net }}
+{% endfor %}
+ no shutdown
+end
+{% else %}
+! RIP not configured
+{% endif %}

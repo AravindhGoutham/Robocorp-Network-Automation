@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Automation Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* ---------- Dark Dashboard Theme ---------- */
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dashboard {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 50px 80px;
+      border-radius: 20px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      color: #00bfff;
+      letter-spacing: 1px;
+    }
+
+    p {
+      color: #ccc;
+      font-size: 1.1em;
+      margin-bottom: 40px;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .menu-item {
+      display: inline-block;
+      text-decoration: none;
+      color: #fff;
+      background: rgba(0, 191, 255, 0.2);
+      border: 1px solid #00bfff;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-size: 1.1em;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+    }
+
+    .menu-item:hover {
+      background: #00bfff;
+      color: #111;
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.6);
+    }
+
+    /* Responsive for smaller screens */
+    @media (max-width: 768px) {
+      .dashboard {
+        width: 90%;
+        padding: 40px 20px;
+      }
+      .menu-item {
+        width: 80%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard">
+    <h1>🌐 Network Automation Portal</h1>
+    <p>Select a section to manage or monitor your network.</p>
+
+    <div class="menu">
+      <a href="/golden_configs" class="menu-item">Golden Configs</a>
+      <a href="/add_device" class="menu-item">Add Device</a>
+      <a href="http://localhost:3000/d/0ae05200-3ebe-4eeb-bdfc-af533f5e783d/interface-status?orgId=1&from=now-5m&to=now&timezone=browser&var-instance=10.0.0.2&refresh=5s"
+         class="menu-item" target="_blank">Grafana Dashboard</a>
+      <a href="http://localhost:9090/classic/targets"
+         class="menu-item" target="_blank">Prometheus</a>
+    </div>
+  </div>
+</body>
+</html>

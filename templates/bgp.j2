@@ -1,0 +1,18 @@
+{% if routing.bgp is defined and routing.bgp.enabled %}
+! BGP Configuration
+config t
+router bgp {{ routing.bgp.as_number }}
+{% if routing.bgp.neighbors %}
+{% for neighbor in routing.bgp.neighbors %}
+ neighbor {{ neighbor.ip }} remote-as {{ neighbor.remote_as }}
+{% endfor %}
+{% endif %}
+{% if routing.bgp.networks %}
+{% for net in routing.bgp.networks %}
+ network {{ net.network }} mask {{ net.mask }}
+{% endfor %}
+{% endif %}
+end
+{% else %}
+! BGP not configured
+{% endif %}

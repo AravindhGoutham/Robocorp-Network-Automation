@@ -1,0 +1,11 @@
+! Initial Configuration
+config t
+{% if hostname %}
+hostname {{ hostname }}
+{% endif %}
+
+{% if username and password %}
+username {{ username }} privilege 15 secret 15 {{ password }}
+{% endif %}
+exit
+end

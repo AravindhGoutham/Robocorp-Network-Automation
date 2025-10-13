@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Running Config - {{ host }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* ---------- Dark Theme Base ---------- */
+    body {
+      font-family: "Fira Code", "Consolas", monospace;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #e0e0e0;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      margin-top: 50px;
+      color: #00bfff;
+      letter-spacing: 1px;
+      font-size: 1.8em;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);
+    }
+
+    /* ---------- Config Output ---------- */
+    pre {
+      width: 85%;
+      max-width: 1100px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid #00bfff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.2);
+      padding: 20px;
+      margin-top: 30px;
+      color: #00ffae;
+      font-size: 14px;
+      line-height: 1.4em;
+      overflow-y: auto;
+      max-height: 75vh;
+      white-space: pre-wrap;
+      backdrop-filter: blur(6px);
+    }
+
+    pre::-webkit-scrollbar {
+      width: 10px;
+    }
+    pre::-webkit-scrollbar-thumb {
+      background-color: #00bfff;
+      border-radius: 5px;
+    }
+
+    /* ---------- Back Link ---------- */
+    .back-link {
+      margin: 25px 0 40px 0;
+      text-align: center;
+    }
+
+    .back-link a {
+      color: #00bfff;
+      text-decoration: none;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+      color: #66d9ff;
+    }
+
+    /* ---------- Download Button ---------- */
+    .download-btn {
+      margin-top: 20px;
+      background: rgba(0, 191, 255, 0.2);
+      border: 1px solid #00bfff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+    }
+
+    .download-btn:hover {
+      background: #00bfff;
+      color: #111;
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      pre {
+        width: 95%;
+        font-size: 13px;
+        max-height: 70vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Running Config for {{ host }}</h2>
+
+  <pre>{{ running_config }}</pre>
+
+  <div class="back-link">
+    <a href="/golden_configs">← Back to Golden Configs</a>
+  </div>
+</body>
+</html>

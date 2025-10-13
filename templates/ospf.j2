@@ -1,0 +1,11 @@
+{% if routing.ospf is defined and routing.ospf.enabled %}
+! OSPF Configuration
+config t
+router ospf {{ routing.ospf.process_id }}
+{% for net in routing.ospf.networks %}
+ network {{ net }}
+{% endfor %}
+end
+{% else %}
+! OSPF not configured
+{% endif %}

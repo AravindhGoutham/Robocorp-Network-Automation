@@ -1,0 +1,11 @@
+{% if vlans %}
+! VLAN Configuration
+config t
+{% for vlan in vlans %}
+vlan {{ vlan.id }}
+ name {{ vlan.name }}
+{% endfor %}
+end
+{% else %}
+! No VLAN configuration
+{% endif %}

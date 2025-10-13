@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Device</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* ---------- Dark Theme ---------- */
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #00bfff;
+      font-size: 2em;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);
+    }
+
+    form {
+      width: 90%;
+      max-width: 900px;
+      margin: 30px auto 50px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.2);
+      backdrop-filter: blur(6px);
+    }
+
+    .accordion-section {
+      margin-bottom: 15px;
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      background: rgba(0, 191, 255, 0.2);
+      color: #fff;
+      cursor: pointer;
+      padding: 14px 18px;
+      font-size: 1.1em;
+      font-weight: 500;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .accordion-header:hover {
+      background: rgba(0, 191, 255, 0.4);
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .accordion-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    input, select {
+      margin: 5px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #00bfff;
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+    }
+
+    button {
+      background: rgba(0, 191, 255, 0.2);
+      border: 1px solid #00bfff;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background: #00bfff;
+      color: #111;
+      transform: translateY(-2px);
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background: #00bfff;
+      color: #111;
+      border: none;
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 8px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    input[type="submit"]:hover {
+      background: #66d9ff;
+    }
+
+    .back-link {
+      margin-bottom: 30px;
+    }
+
+    .back-link a {
+      color: #00bfff;
+      text-decoration: none;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <script>
+    // Accordion toggle logic (only one open at a time)
+    document.addEventListener("DOMContentLoaded", function() {
+      const headers = document.querySelectorAll(".accordion-header");
+      headers.forEach(header => {
+        header.addEventListener("click", function() {
+          document.querySelectorAll(".accordion-content").forEach(c => c.classList.remove("active"));
+          const content = this.nextElementSibling;
+          content.classList.add("active");
+        });
+      });
+    });
+
+    // Helper to add dynamic input blocks
+    function addField(containerId, html) {
+      const container = document.getElementById(containerId);
+      const div = document.createElement("div");
+      div.classList.add("dynamic-block");
+      div.innerHTML = html;
+      container.appendChild(div);
+    }
+
+    // Add Interface
+    function addInterface() {
+      addField("interfaces", `
+        <div class="interface-item">
+          Name: <input name="intf_name[]" required>
+          IPv4: <input name="intf_ipv4[]">
+          IPv6: <input name="intf_ipv6[]">
+          Mode:
+          <select name="intf_mode[]">
+            <option value="access">access</option>
+            <option value="trunk">trunk</option>
+            <option value="no">no</option>
+          </select>
+          VLAN: <input name="intf_vlan[]">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+
+    // Add VLAN
+    function addVlan() {
+      addField("vlans", `
+        <div class="vlan-item">
+          ID: <input name="vlan_id[]">
+          Name: <input name="vlan_name[]">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+
+    // Add OSPF network
+    function addOspfNetwork() {
+      addField("ospf_networks", `
+        <div class="ospf-net-item">
+          Network: <input name="ospf_network[]">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+
+    // Add RIP network
+    function addRipNetwork() {
+      addField("rip_networks", `
+        <div class="rip-net-item">
+          Network: <input name="rip_network[]">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+
+    // Add BGP neighbor
+    function addBgpNeighbor() {
+      addField("bgp_neighbors", `
+        <div class="bgp-neigh-item">
+          Neighbor IP: <input name="bgp_neigh_ip[]">
+          Remote-AS: <input name="bgp_neigh_as[]">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+
+    // Add BGP network
+    function addBgpNetwork() {
+      addField("bgp_networks", `
+        <div class="bgp-net-item">
+          Network: <input name="bgp_network[]" placeholder="10.0.0.0 255.255.255.0">
+          <button type="button" onclick="this.parentElement.remove()">Remove</button>
+        </div>
+      `);
+    }
+  </script>
+</head>
+
+<body>
+  <h2>🧩 Add Device</h2>
+
+  <form method="POST" action="/generate">
+
+    <!-- Basic Info -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">Basic Info</button>
+      <div class="accordion-content active">
+        Hostname: <input type="text" name="hostname" required><br>
+        Username: <input type="text" name="username">
+        Password: <input type="password" name="password">
+      </div>
+    </div>
+
+    <!-- Interface Details -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">Interface Details</button>
+      <div class="accordion-content">
+        <div id="interfaces"></div>
+        <button type="button" onclick="addInterface()">+ Add Interface</button>
+      </div>
+    </div>
+
+    <!-- VLAN Details -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">VLAN Details</button>
+      <div class="accordion-content">
+        <div id="vlans"></div>
+        <button type="button" onclick="addVlan()">+ Add VLAN</button>
+      </div>
+    </div>
+
+    <!-- OSPF -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">OSPF</button>
+      <div class="accordion-content">
+        Process ID: <input name="ospf_process">
+        <div id="ospf_networks"></div>
+        <button type="button" onclick="addOspfNetwork()">+ Add Network</button>
+      </div>
+    </div>
+
+    <!-- RIP -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">RIP</button>
+      <div class="accordion-content">
+        <div id="rip_networks"></div>
+        <button type="button" onclick="addRipNetwork()">+ Add Network</button>
+      </div>
+    </div>
+
+    <!-- BGP -->
+    <div class="accordion-section">
+      <button type="button" class="accordion-header">BGP</button>
+      <div class="accordion-content">
+        Local-AS: <input name="bgp_as"><br><br>
+        <div id="bgp_neighbors"></div>
+        <button type="button" onclick="addBgpNeighbor()">+ Add Neighbor</button>
+        <div id="bgp_networks"></div>
+        <button type="button" onclick="addBgpNetwork()">+ Add Network</button>
+      </div>
+    </div>
+
+    <input type="submit" value="Generate Config">
+  </form>
+
+  <div class="back-link">
+    <a href="/">← Back to Dashboard</a>
+  </div>
+</body>
+</html>
