@@ -75,7 +75,7 @@ pipeline {
         success {
             echo 'All tests passed successfully!'
             emailext (
-                to: 'your_email@gmail.com',
+                to: 'aravindh.goutham.mahe@gmail.com',
                 subject: "SUCCESS: Network Automation Daily Build #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Network Automation Daily Report</h2>
@@ -94,7 +94,7 @@ pipeline {
         failure {
             echo 'Some network or template tests failed!'
             emailext (
-                to: 'your_email@gmail.com',
+                to: 'aravindh.goutham.mahe@gmail.com',
                 subject: "FAILED: Network Automation Daily Build #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Network Automation Daily Report</h2>
