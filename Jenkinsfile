@@ -41,7 +41,7 @@ pipeline {
         }
 
         /* -------------------- Ping Test -------------------- */
-        stage('Ping Test (8.8.8.8)') {
+        stage('Ping Test (8.8.8.8) Webserver') {
             steps {
                 echo 'Running global connectivity tests...'
                 sh '''

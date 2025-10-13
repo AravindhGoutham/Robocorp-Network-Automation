@@ -37,7 +37,7 @@ def main():
 
     for device in devices:
         host = device["host"]
-        print(f"Testing {host} -> {PING_TARGET} ... ", end="", flush=True)
+        print(f"Testing {host} -> {PING_TARGET}", end="", flush=True)
 
         success, output = run_ping(device, PING_TARGET)
         status = "PASS" if success else "FAIL"
