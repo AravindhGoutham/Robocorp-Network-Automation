@@ -26,7 +26,7 @@ def validate_templates():
 
     for filename in os.listdir(TEMPLATES_DIR):
         if filename.endswith(".j2"):
-            print(f"Checking {filename} ... ", end="", flush=True)
+            print(f"Checking {filename} ", end="", flush=True)
             try:
                 template = env.get_template(filename)
                 template.render(**DUMMY_CONTEXT)
