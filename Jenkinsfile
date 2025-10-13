@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    triggers {
+        // Run every day at 2 AM
+        cron('H 2 * * *')
+    }
+
     environment {
         PROJECT_DIR = "/home/student/Network-Automation"
         VENV = "${PROJECT_DIR}/venv"
@@ -14,6 +19,7 @@ pipeline {
                 sh '''
                     cd $PROJECT_DIR
 
+                    # Handle venv permissions or recreate it if needed
                     if [ -d "$VENV" ] && [ ! -w "$VENV" ]; then
                         echo "Existing venv has permission issues. Removing..."
                         rm -rf "$VENV"
@@ -24,6 +30,7 @@ pipeline {
                         python3 -m venv "$VENV"
                     fi
 
+                    # Install dependencies
                     $VENV/bin/pip install --upgrade pip netmiko pyyaml jinja2
                 '''
             }
@@ -67,12 +74,46 @@ pipeline {
     post {
         success {
             echo 'All tests passed successfully!'
+            emailext (
+                to: 'your_email@gmail.com',
+                subject: "SUCCESS: Network Automation Daily Build #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Network Automation Daily Report</h2>
+                    <p>All tests passed successfully.</p>
+                    <ul>
+                        <li><b>Job:</b> ${env.JOB_NAME}</li>
+                        <li><b>Build:</b> #${env.BUILD_NUMBER}</li>
+                        <li><b>Date:</b> ${new Date()}</li>
+                    </ul>
+                    <p><a href="${env.BUILD_URL}">View full build logs in Jenkins</a></p>
+                """,
+                mimeType: 'text/html'
+            )
         }
+
         failure {
             echo 'Some network or template tests failed!'
+            emailext (
+                to: 'your_email@gmail.com',
+                subject: "FAILED: Network Automation Daily Build #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Network Automation Daily Report</h2>
+                    <p>One or more tests failed during the nightly build.</p>
+                    <ul>
+                        <li><b>Job:</b> ${env.JOB_NAME}</li>
+                        <li><b>Build:</b> #${env.BUILD_NUMBER}</li>
+                        <li><b>Date:</b> ${new Date()}</li>
+                    </ul>
+                    <p><a href="${env.BUILD_URL}">View detailed failure logs</a></p>
+                """,
+                mimeType: 'text/html'
+            )
         }
+
         always {
             echo 'Pipeline execution complete.'
         }
     }
 }
+
+
