@@ -13,7 +13,17 @@ pipeline {
                 echo 'Setting up Python environment...'
                 sh '''
                     cd $PROJECT_DIR
-                    python3 -m venv venv
+
+                    if [ -d "$VENV" ] && [ ! -w "$VENV" ]; then
+                        echo "Existing venv has permission issues. Removing..."
+                        rm -rf "$VENV"
+                    fi
+
+                    if [ ! -d "$VENV" ]; then
+                        echo "Creating a new virtual environment..."
+                        python3 -m venv "$VENV"
+                    fi
+
                     $VENV/bin/pip install --upgrade pip netmiko pyyaml jinja2
                 '''
             }
@@ -29,7 +39,6 @@ pipeline {
                 '''
             }
         }
-
 
         /* -------------------- Ping Test -------------------- */
         stage('Ping Test (8.8.8.8)') {
@@ -67,5 +76,3 @@ pipeline {
         }
     }
 }
-
-
