@@ -1,0 +1,25 @@
+hostname: admin
+username: admin
+password: admin
+interfaces:
+- name: Ethernet 5
+  switchport_mode: access
+  vlan: null
+  ipv4: 10.0.0.10/24
+  ipv6: null
+vlans: []
+routing:
+  ospf:
+    enabled: false
+    process_id: ''
+    networks: []
+  rip:
+    enabled: false
+    networks: []
+  bgp:
+    enabled: false
+    as_number: ''
+    neighbors: []
+    networks: []
+static_routes: []
+static_routes_v6: []

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error - Invalid IPs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background: #0f2027;
+      color: #fff;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    .error-box {
+      background: rgba(255,0,0,0.2);
+      border: 1px solid red;
+      border-radius: 10px;
+      padding: 20px;
+      display: inline-block;
+    }
+    h2 { color: #ff5555; }
+    ul { text-align: left; display: inline-block; }
+  </style>
+</head>
+<body>
+  <div class="error-box">
+    <h2>Error</h2>
+    <ul>
+      {% for err in errors %}
+      <li>{{ err }}</li>
+      {% endfor %}
+    </ul>
+    <p><a href="/add_device" style="color:#00bfff;">← Go Back</a></p>
+  </div>
+</body>
+</html>

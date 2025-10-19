@@ -4,23 +4,52 @@ from jinja2 import Environment, FileSystemLoader
 from netmiko import ConnectHandler
 from datetime import datetime
 from healthcheck import run_health_check
-import yaml, os
+import yaml, os, csv
 from diff import compare_config_diff
+from ipvalidate import validate_ipv4
 
 app = Flask(__name__)
 env = Environment(loader=FileSystemLoader("templates"))
 
 YAML_DIR = "generated/yamls"
 CONFIG_DIR = "generated/configs"
+IPAM_FILE = "IPAM_Robocorp.csv"
+
 os.makedirs(YAML_DIR, exist_ok=True)
 os.makedirs(CONFIG_DIR, exist_ok=True)
 
+def ip_exists_in_ipam(ip):
+    if not os.path.exists(IPAM_FILE):
+        return False
 
-# Home Page
+    try:
+        ip_input = ip.split("/")[0]
+
+        with open(IPAM_FILE, newline="") as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                ip_field = (
+                    row.get("ip_address") or
+                    row.get("cidr") or
+                    row.get("IP") or
+                    row.get("ip")
+                )
+                if ip_field:
+                    ip_csv = ip_field.split("/")[0]
+                    if ip_csv == ip_input:
+                        return True
+        return False
+
+    except Exception as e:
+        print(f"Error reading IPAM file: {e}")
+        return False
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
+# Config Diff Page
 @app.route("/config_diff", methods=["GET", "POST"])
 def config_diff():
     with open("devices.yaml") as f:
@@ -38,15 +67,16 @@ def config_diff():
         except Exception as e:
             return f"<h3 style='color:red;'>Error: {e}</h3>"
 
-    # For GET requests — show the form
     return render_template("config_diff.html", devices=devices)
 
-# Add Device Form Page
+
+# Add Device Form
 @app.route("/add_device")
 def add_device():
     return render_template("add_device.html")
 
 
+# Health Check Page
 @app.route("/healthcheck", methods=["GET", "POST"])
 def healthcheck():
     with open("devices.yaml") as f:
@@ -57,10 +87,9 @@ def healthcheck():
         results = run_health_check(ip)
         return render_template("health_results.html", ip=ip, results=results)
 
-    # GET — show dropdown of available devices
     return render_template("healthcheck.html", devices=devices)
 
-# Generate Configuration
+
 @app.route("/generate", methods=["POST"])
 def generate():
     hostname = request.form.get("hostname")
@@ -73,6 +102,21 @@ def generate():
     i_ipv6s = request.form.getlist("intf_ipv6[]")
     i_modes = request.form.getlist("intf_mode[]")
     i_vlans = request.form.getlist("intf_vlan[]")
+
+    invalid_ips = []
+    duplicate_ips = []
+
+    for ip in i_ipv4s:
+        if ip:
+            result = validate_ipv4(ip)
+            if "Invalid" in result:
+                invalid_ips.append(result)
+            elif ip_exists_in_ipam(ip):
+                duplicate_ips.append(f"Duplicate {ip} - already exists in IPAM")
+
+    if invalid_ips or duplicate_ips:
+        errors = invalid_ips + duplicate_ips
+        return render_template("error.html", hostname=hostname, errors=errors)
 
     for n, ipv4, ipv6, mode, vlan in zip(i_names, i_ipv4s, i_ipv6s, i_modes, i_vlans):
         if n:
@@ -143,6 +187,7 @@ def generate():
                 "next_hop": nh6
             })
 
+    # ---- Device Data ----
     device_data = {
         "hostname": hostname,
         "username": username,
@@ -154,10 +199,12 @@ def generate():
         "static_routes_v6": static_routes_v6
     }
 
+    # ---- YAML Generation ----
     yaml_file = os.path.join(YAML_DIR, f"{hostname}.yaml")
     with open(yaml_file, "w") as f:
         yaml.dump(device_data, f, sort_keys=False)
 
+    # ---- Config Rendering ----
     template = env.get_template("base_config.j2")
     rendered_config = template.render(**device_data)
 
@@ -165,6 +212,16 @@ def generate():
     with open(config_file, "w") as f:
         f.write(rendered_config)
 
+    # ---- Append new IPs to IPAM-Robocorp.csv ----
+    with open(IPAM_FILE, "a", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        if os.path.getsize(IPAM_FILE) == 0:
+            writer.writerow(["hostname", "interface", "ip_address"])
+        for iface in interfaces:
+            if iface["ipv4"]:
+                writer.writerow([hostname, iface["name"], iface["ipv4"]])
+
+    # ---- Output Page ----
     return render_template(
         "output.html",
         hostname=hostname,
@@ -173,19 +230,15 @@ def generate():
     )
 
 
-# Golden Configs Page
 @app.route("/golden_configs")
 def golden_configs():
-    """Display all devices from devices.yaml"""
     with open("devices.yaml") as f:
         devices = yaml.safe_load(f)
     return render_template("golden_configs.html", devices=devices)
 
 
-# Fetch Running Config (Netmiko)
 @app.route("/fetch_config/<host>")
 def fetch_config(host):
-    """SSH into device using devices.yaml and retrieve running config"""
     with open("devices.yaml") as f:
         devices = yaml.safe_load(f)
 
@@ -219,6 +272,7 @@ def fetch_config(host):
         host=host,
         running_config=running_config
     )
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
