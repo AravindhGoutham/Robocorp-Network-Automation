@@ -12,6 +12,21 @@ pipeline {
             }
         }
 
+        stage('Setup Python Environment') {
+            steps {
+                echo 'Setting up Python environment...'
+                sh '''
+                    if [ ! -d "${VENV_DIR}" ]; then
+                        python3 -m venv ${VENV_DIR}
+                    fi
+
+                    . ${VENV_DIR}/bin/activate
+                    pip install --upgrade pip
+                    pip install netmiko PyYAML prettytable ipaddress
+                '''
+            }
+        }
+
         stage('Run IP Validation') {
             steps {
                 echo 'Running ipvalidate.py...'
