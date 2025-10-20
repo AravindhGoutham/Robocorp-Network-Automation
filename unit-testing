@@ -1,68 +1,115 @@
 pipeline {
     agent any
+
     environment {
-        VENV_DIR = 'venv'
+        PROJECT_DIR = "/home/student/Network-Automation"
+        VENV        = "${PROJECT_DIR}/venv"
     }
 
     stages {
-        stage('Checkout Repository') {
-            steps {
-                echo 'Checking out latest code from Git...'
-                checkout scm
-            }
-        }
 
-        stage('Setup Python Environment') {
+        /* -------------------- Setup -------------------- */
+        stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
                 sh '''
-                    if [ ! -d "${VENV_DIR}" ]; then
-                        python3 -m venv ${VENV_DIR}
+                    cd $PROJECT_DIR
+
+                    # Fix permission or recreate venv
+                    if [ -d "$VENV" ] && [ ! -w "$VENV" ]; then
+                        echo "Existing venv has permission issues. Removing..."
+                        rm -rf "$VENV"
                     fi
-                    . ${VENV_DIR}/bin/activate
-                    pip install --upgrade pip
-                    pip install netmiko PyYAML prettytable ipaddress
+
+                    # Create venv if missing
+                    if [ ! -d "$VENV" ]; then
+                        echo "Creating a new virtual environment..."
+                        python3 -m venv "$VENV"
+                    fi
+
+                    # Install all dependencies needed for all tests
+                    $VENV/bin/pip install --upgrade pip
+                    $VENV/bin/pip install netmiko pyyaml prettytable jinja2 ipaddress
                 '''
             }
         }
 
-        stage('Run IP Validation') {
+        /* -------------------- IP Validation -------------------- */
+        stage('IP Validation') {
             steps {
-                echo 'Running ipvalidate.py...'
+                echo 'Running IP validation (ipvalidate.py)...'
                 sh '''
-                    . ${VENV_DIR}/bin/activate
-                    echo "----- IP Validation Results -----"
-                    python3 ipvalidate.py
+                    cd $PROJECT_DIR
+                    echo "----- IP Address Validation -----"
+                    $VENV/bin/python3 ipvalidate.py
                     echo "---------------------------------"
                 '''
             }
         }
 
-        stage('Run SSH Check') {
+        /* -------------------- SSH Connectivity -------------------- */
+        stage('SSH Connectivity Check') {
             steps {
-                echo 'Running ssh-check.py...'
+                echo 'Running SSH connectivity check (ssh-check.py)...'
                 sh '''
-                    . ${VENV_DIR}/bin/activate
+                    cd $PROJECT_DIR
                     echo "----- SSH Connectivity Check -----"
-                    python3 ssh-check.py
+                    $VENV/bin/python3 ssh-check.py
                     echo "----------------------------------"
+                '''
+            }
+        }
+
+        /* -------------------- Jinja2 Template Validation -------------------- */
+        stage('Jinja2 Template Validation') {
+            steps {
+                echo 'Validating Jinja2 templates for syntax...'
+                sh '''
+                    cd $PROJECT_DIR
+                    echo "----- Jinja2 Template Validation -----"
+                    $VENV/bin/python3 template_validation.py
+                    echo "--------------------------------------"
+                '''
+            }
+        }
+
+        /* -------------------- Ping Test (Webserver Reachability) -------------------- */
+        stage('Ping Webserver (8.8.8.8)') {
+            steps {
+                echo 'Running ping test for external reachability...'
+                sh '''
+                    cd $PROJECT_DIR
+                    echo "----- Webserver Connectivity Test -----"
+                    $VENV/bin/python3 network_tests.py
+                    echo "---------------------------------------"
+                '''
+            }
+        }
+
+        /* -------------------- Routing Health -------------------- */
+        stage('Routing Health (OSPF/BGP/NMAS)') {
+            steps {
+                echo 'Running routing health checks...'
+                sh '''
+                    cd $PROJECT_DIR
+                    echo "----- Routing Health Check -----"
+                    $VENV/bin/python3 routing_healthcheck.py
+                    echo "--------------------------------"
                 '''
             }
         }
     }
 
+    /* -------------------- Post Actions -------------------- */
     post {
         success {
-            echo 'All validation checks completed successfully.'
+            echo 'All validation tests passed successfully!'
         }
         failure {
-            echo 'One or more validation checks failed.'
+            echo 'Some validation tests failed. Check logs above.'
         }
         always {
-            echo 'Cleaning up temporary files...'
-            sh 'rm -rf ${VENV_DIR}'
+            echo 'Pipeline execution complete.'
         }
     }
 }
-
-
