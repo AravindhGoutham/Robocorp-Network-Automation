@@ -37,7 +37,7 @@ pipeline {
         /* -------------------- IP Validation -------------------- */
         stage('IP Validation') {
             steps {
-                echo 'Running IP validation (ipvalidate.py)...'
+                echo 'Running IP validation (ipvalidate.py)'
                 sh '''
                     cd $PROJECT_DIR
                     echo "----- IP Address Validation -----"
@@ -50,7 +50,7 @@ pipeline {
         /* -------------------- SSH Connectivity -------------------- */
         stage('SSH Connectivity Check') {
             steps {
-                echo 'Running SSH connectivity check (ssh-check.py)...'
+                echo 'Running SSH connectivity check (ssh_check.py)'
                 sh '''
                     cd $PROJECT_DIR
                     echo "----- SSH Connectivity Check -----"
@@ -63,7 +63,7 @@ pipeline {
         /* -------------------- Jinja2 Template Validation -------------------- */
         stage('Jinja2 Template Validation') {
             steps {
-                echo 'Validating Jinja2 templates for syntax...'
+                echo 'Validating Jinja2 templates for syntax'
                 sh '''
                     cd $PROJECT_DIR
                     echo "----- Jinja2 Template Validation -----"
@@ -87,9 +87,9 @@ pipeline {
         }
 
         /* -------------------- Routing Health -------------------- */
-        stage('Routing Health (OSPF/BGP/NMAS)') {
+        stage('Routing Health (OSPF/BGP)') {
             steps {
-                echo 'Running routing health checks...'
+                echo 'Running routing health checks'
                 sh '''
                     cd $PROJECT_DIR
                     echo "----- Routing Health Check -----"
