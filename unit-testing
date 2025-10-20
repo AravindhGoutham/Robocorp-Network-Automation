@@ -54,7 +54,7 @@ pipeline {
                 sh '''
                     cd $PROJECT_DIR
                     echo "----- SSH Connectivity Check -----"
-                    $VENV/bin/python3 ssh-check.py
+                    $VENV/bin/python3 ssh_check.py
                     echo "----------------------------------"
                 '''
             }
