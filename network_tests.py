@@ -33,7 +33,7 @@ def main():
 
     success_all = True
 
-    print("\n=== Global Ping Test ===\n")
+    print("\n=== Webserver Ping Test ===\n")
 
     for device in devices:
         host = device["host"]
@@ -46,7 +46,6 @@ def main():
         if not success:
             success_all = False
 
-    print("\n=== End of Global Ping Test ===")
 
     if not success_all:
         exit(1)

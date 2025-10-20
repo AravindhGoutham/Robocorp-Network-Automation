@@ -1,0 +1,25 @@
+[run]
+# Tell coverage to only measure your own Python files (not libraries)
+source = .
+
+# Skip these files/folders during measurement
+omit =
+    */venv/*             
+    test_*             
+    app.py               
+    diff.py             
+    github.py
+    view_table.py
+    template_validation.py
+    healthcheck.py       
+    IPAMcsv.py           
+    password_rotation.py
+[report]
+show_missing = True
+
+# Ignore certain lines that aren't testable
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    except Exception
+    pass

@@ -15,10 +15,10 @@ def validate_ipv4(ip):
             return f"Invalid {ip} - it is a loopback address"
         if ip_obj.is_link_local:
             return f"Invalid {ip} - it is a link-local address"
-        if ip_obj.is_reserved:
-            return f"Invalid {ip} - it is a reserved address"
         if ip_obj == ipaddress.IPv4Address("255.255.255.255"):
             return f"Invalid {ip} - it is a broadcast address"
+        if ip_obj.is_reserved:
+            return f"Invalid {ip} - it is a reserved address"
 
         return f"Valid {ip}"
 

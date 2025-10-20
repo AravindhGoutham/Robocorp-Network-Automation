@@ -11,7 +11,7 @@ def load_devices(file_path):
     try:
         with open(file_path, "r") as f:
             devices = yaml.safe_load(f)
-        if not devices:
+        if not isinstance(devices, list) or not devices:
             print("[ERROR] devices.yaml is empty or invalid.")
             return []
         return devices
