@@ -51,19 +51,26 @@ def main():
     print(f"{'Hostname':<15} {'Interface':<15} {'CIDR':<20} {'Validation Result'}")
     print("-" * 70)
 
+    valid_count = invalid_count = 0
+
     for device in ipam_data:
         hostname = device.get("hostname", "Unknown")
         interface = device.get("interface", "Unknown")
         cidr = device.get("cidr", "")
-        status = device.get("status", "")
-
         if cidr:
             result = validate_ipv4(cidr)
             print(f"{hostname:<15} {interface:<15} {cidr:<20} {result}")
+            if result.startswith("Valid"):
+                valid_count += 1
+            else:
+                invalid_count += 1
         else:
             print(f"{hostname:<15} {interface:<15} {'N/A':<20} No IP found")
 
+    print("\nSummary:")
+    print(f"Total Records: {len(ipam_data)}")
+    print(f"Valid IPs: {valid_count}")
+    print(f"Invalid IPs: {invalid_count}")
+
 if __name__ == "__main__":
     main()
-	
-

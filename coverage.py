@@ -5,7 +5,7 @@ from prettytable import PrettyTable
 
 # === Config ===
 CODE_DIR = "."
-TEST_FILES = ["routing_healthcheck.py", "network_tests", "test_ipvalidate.py"]
+TEST_FILES = ["routing_healthcheck.py", "network_tests", "test_ipvalidate.py", "test_password_rotation.py", "test_healthcheck.py"]
 
 
 def get_functions_from_file(filepath):

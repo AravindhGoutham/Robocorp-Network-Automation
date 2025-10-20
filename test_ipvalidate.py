@@ -4,9 +4,6 @@ import csv
 import pytest
 from ipvalidate import validate_ipv4, get_ipam_data
 
-# -------------------------------
-# Tests for validate_ipv4()
-# -------------------------------
 
 def test_valid_ip():
     result = validate_ipv4("192.168.1.1")
@@ -33,12 +30,7 @@ def test_broadcast_ip():
     assert "broadcast" in result
 
 
-# -------------------------------
-# Tests for get_ipam_data()
-# -------------------------------
-
 def test_get_ipam_data_valid_csv(tmp_path):
-    # Create a temporary CSV file for testing
     data = [
         {"hostname": "R1", "interface": "Eth0", "cidr": "10.0.0.1/24", "status": "up"},
         {"hostname": "R2", "interface": "Eth1", "cidr": "10.0.0.2/24", "status": "up"}
