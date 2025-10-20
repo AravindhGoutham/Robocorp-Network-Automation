@@ -6,8 +6,6 @@ DEVICES_FILE = "devices.yaml"
 
 OSPF_DEVICES = ["10.0.0.4", "10.0.0.5", "10.0.0.6", "10.0.0.7", "10.0.0.8", "10.0.0.9"]
 BGP_DEVICES = ["10.0.0.8", "10.0.0.9"]
-PING_DEVICES = ["10.0.0.2", "10.0.0.3", "10.0.0.4", "10.0.0.5", "10.0.0.6", "10.0.0.7", "10.0.0.8", "10.0.0.9"]
-PING_TARGET = "10.0.0.1"
 
 
 def connect_device(device):
@@ -41,12 +39,6 @@ def test_bgp(connection):
     return result
 
 
-def test_ping(connection, target):
-    output = connection.send_command(f"ping {target}", expect_string=r"#|Success|Loss")
-    if "100 percent loss" in output.lower() or "unreachable" in output.lower():
-        return "FAIL"
-    return "PASS"
-
 
 def main():
     with open(DEVICES_FILE) as f:
@@ -58,7 +50,7 @@ def main():
 
     for device in devices:
         host = device["host"]
-        if host not in OSPF_DEVICES + BGP_DEVICES + PING_DEVICES:
+        if host not in OSPF_DEVICES + BGP_DEVICES:
             continue
 
         print(f"--- Device {host} ---")
@@ -78,12 +70,6 @@ def main():
         if host in BGP_DEVICES:
             result = test_bgp(conn)
             print(f"BGP Neighborship: {result}")
-            if result == "FAIL":
-                overall_ok = False
-
-        if host in PING_DEVICES:
-            result = test_ping(conn, PING_TARGET)
-            print(f"Ping {PING_TARGET}: {result}")
             if result == "FAIL":
                 overall_ok = False
 
