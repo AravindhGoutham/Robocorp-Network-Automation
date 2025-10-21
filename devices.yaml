@@ -1,32 +1,32 @@
 - host: 10.0.0.2
   device_type: arista_eos
-  current_username: user20251019_84
-  current_password: -QalEBvE&od(9uzl
+  current_username: user20251020_20
+  current_password: nnjmvkj#@!aE$4vE
 - host: 10.0.0.3
   device_type: arista_eos
-  current_username: user20251019_33
-  current_password: Rmz7SqvW-)vAS$L_
+  current_username: user20251020_88
+  current_password: 7*s#uzsBLqg2jr=T
 - host: 10.0.0.4
   device_type: arista_eos
-  current_username: user20251019_62
-  current_password: +N5t7BD#fE%+uev&
+  current_username: user20251020_34
+  current_password: )=7M(8+$+KxniH&Z
 - host: 10.0.0.5
   device_type: arista_eos
-  current_username: user20251019_68
-  current_password: 7#=y!aTqG4b+LDnP
+  current_username: user20251020_90
+  current_password: J*Z)VwN1Gezdu)A&
 - host: 10.0.0.6
   device_type: arista_eos
-  current_username: user20251019_71
-  current_password: P_gzQfSwjZoy9Er)
+  current_username: user20251020_67
+  current_password: $kLx&78!_TAr-VBT
 - host: 10.0.0.7
   device_type: arista_eos
-  current_username: user20251019_80
-  current_password: -IVjbL(f@2!(t$Sh
+  current_username: user20251020_98
+  current_password: oOCG7oNLzynyESLz
 - host: 10.0.0.8
   device_type: arista_eos
-  current_username: user20251019_33
-  current_password: A=%w4s=h-C%hm4(L
+  current_username: user20251020_47
+  current_password: '@wX2N4r!ESUer7ac'
 - host: 10.0.0.9
   device_type: arista_eos
-  current_username: user20251019_34
-  current_password: Krr3=qrBX4%UF1kr
+  current_username: user20251020_60
+  current_password: 5rRccHYQRFao3bwn
