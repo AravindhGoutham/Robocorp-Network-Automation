@@ -5,7 +5,7 @@ no aaa root
 no username admin
 !
 username aravindh secret sha512 $6$tC1T2oILtHmLxiKc$2n7U3s0Z36bVaU1YfNJstYo7Tcg8QytrtRGkjpB4r2SkL5JUU8N8N08TwQBJ9uGGetSlBn/yOUNNsUX6E5.nM.
-username user20251014_89 secret sha512 $6$W.CeHOAZit0T6Twx$b0DcXVBpkPri6CES9ic11S0A1YluwUObuVRVymYSlKz9j9Rb7QiqBagdSGX9sTXKiRqMDf4bAplTdyJH5Fofr/
+username user20251025_77 secret sha512 $6$iibzagE2yYxnntlg$mYSletx8O.qLlhkgkjnI3fcfFftFEXASH4St7uzsVopZosTWokr0CJRW11Kb8cSznxPx4Hrbx29nJxut2e2tQ0
 !
 management api http-commands
    protocol http port 50001
