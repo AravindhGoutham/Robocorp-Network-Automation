@@ -18,13 +18,14 @@ IPAM_FILE = "IPAM_Robocorp.csv"
 os.makedirs(YAML_DIR, exist_ok=True)
 os.makedirs(CONFIG_DIR, exist_ok=True)
 
+
+# ---- Check for duplicate IPs in IPAM ----
 def ip_exists_in_ipam(ip):
     if not os.path.exists(IPAM_FILE):
         return False
 
     try:
         ip_input = ip.split("/")[0]
-
         with open(IPAM_FILE, newline="") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
@@ -39,17 +40,17 @@ def ip_exists_in_ipam(ip):
                     if ip_csv == ip_input:
                         return True
         return False
-
     except Exception as e:
         print(f"Error reading IPAM file: {e}")
         return False
+
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-# Config Diff Page
+# ---- Config Diff ----
 @app.route("/config_diff", methods=["GET", "POST"])
 def config_diff():
     with open("devices.yaml") as f:
@@ -70,13 +71,13 @@ def config_diff():
     return render_template("config_diff.html", devices=devices)
 
 
-# Add Device Form
+# ---- Add Device ----
 @app.route("/add_device")
 def add_device():
     return render_template("add_device.html")
 
 
-# Health Check Page
+# ---- Health Check ----
 @app.route("/healthcheck", methods=["GET", "POST"])
 def healthcheck():
     with open("devices.yaml") as f:
@@ -90,12 +91,14 @@ def healthcheck():
     return render_template("healthcheck.html", devices=devices)
 
 
+# ---- Generate Config ----
 @app.route("/generate", methods=["POST"])
 def generate():
     hostname = request.form.get("hostname")
     username = request.form.get("username")
     password = request.form.get("password")
 
+    # ---------- Interfaces ----------
     interfaces = []
     i_names = request.form.getlist("intf_name[]")
     i_ipv4s = request.form.getlist("intf_ipv4[]")
@@ -128,6 +131,7 @@ def generate():
                 "ipv6": ipv6 if ipv6 else None
             })
 
+    # ---------- VLAN ----------
     vlans = []
     v_ids = request.form.getlist("vlan_id[]")
     v_names = request.form.getlist("vlan_name[]")
@@ -135,17 +139,33 @@ def generate():
         if vid:
             vlans.append({"id": vid, "name": vname})
 
+    # ---------- OSPF ----------
+    ospf_networks = []
+    ospf_nets = request.form.getlist("ospf_network[]")
+    ospf_areas = request.form.getlist("ospf_area[]")
+
+    for net, area in zip(ospf_nets, ospf_areas):
+        net = net.strip()
+        area = area.strip()
+        if net:
+            ospf_networks.append({
+                "network": net,
+                "area": area if area else "0"   # Default area 0 if blank
+            })
+
     ospf = {
         "enabled": bool(request.form.get("ospf_process")),
         "process_id": request.form.get("ospf_process"),
-        "networks": [n for n in request.form.getlist("ospf_network[]") if n]
+        "networks": ospf_networks
     }
 
+    # ---------- RIP ----------
     rip = {
         "enabled": bool(request.form.getlist("rip_network[]")),
         "networks": [n for n in request.form.getlist("rip_network[]") if n]
     }
 
+    # ---------- BGP ----------
     neighbors = []
     bgp_neigh_ips = request.form.getlist("bgp_neigh_ip[]")
     bgp_neigh_as = request.form.getlist("bgp_neigh_as[]")
@@ -163,6 +183,7 @@ def generate():
         ]
     }
 
+    # ---------- Static Routes ----------
     static_routes = []
     s_destinations = request.form.getlist("static_dest[]")
     s_masks = request.form.getlist("static_mask[]")
@@ -176,6 +197,7 @@ def generate():
                 "next_hop": nh
             })
 
+    # ---------- IPv6 Static Routes ----------
     static_routes_v6 = []
     s6_destinations = request.form.getlist("staticv6_dest[]")
     s6_next_hops = request.form.getlist("staticv6_nh[]")
@@ -187,7 +209,7 @@ def generate():
                 "next_hop": nh6
             })
 
-    # ---- Device Data ----
+    # ---------- Device Data ----------
     device_data = {
         "hostname": hostname,
         "username": username,
@@ -199,12 +221,12 @@ def generate():
         "static_routes_v6": static_routes_v6
     }
 
-    # ---- YAML Generation ----
+    # ---------- YAML Generation ----------
     yaml_file = os.path.join(YAML_DIR, f"{hostname}.yaml")
     with open(yaml_file, "w") as f:
         yaml.dump(device_data, f, sort_keys=False)
 
-    # ---- Config Rendering ----
+    # ---------- Config Rendering ----------
     template = env.get_template("base_config.j2")
     rendered_config = template.render(**device_data)
 
@@ -212,7 +234,7 @@ def generate():
     with open(config_file, "w") as f:
         f.write(rendered_config)
 
-    # ---- Append new IPs to IPAM-Robocorp.csv ----
+    # ---------- Update IPAM ----------
     with open(IPAM_FILE, "a", newline="") as csvfile:
         writer = csv.writer(csvfile)
         if os.path.getsize(IPAM_FILE) == 0:
@@ -221,7 +243,7 @@ def generate():
             if iface["ipv4"]:
                 writer.writerow([hostname, iface["name"], iface["ipv4"]])
 
-    # ---- Output Page ----
+    # ---------- Render Output ----------
     return render_template(
         "output.html",
         hostname=hostname,
@@ -230,6 +252,7 @@ def generate():
     )
 
 
+# ---- Golden Configs ----
 @app.route("/golden_configs")
 def golden_configs():
     with open("devices.yaml") as f:
@@ -237,6 +260,7 @@ def golden_configs():
     return render_template("golden_configs.html", devices=devices)
 
 
+# ---- Fetch Config ----
 @app.route("/fetch_config/<host>")
 def fetch_config(host):
     with open("devices.yaml") as f:

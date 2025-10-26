@@ -201,11 +201,12 @@
       `);
     }
 
-    // OSPF
+    // OSPF (with Area ID)
     function addOspfNetwork() {
       addField("ospf_networks", `
         <div>
           Network: <input name="ospf_network[]">
+          Area ID: <input name="ospf_area[]">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);
@@ -235,7 +236,7 @@
     function addBgpNetwork() {
       addField("bgp_networks", `
         <div>
-          Network: <input name="bgp_network[]" placeholder="10.0.0.0 255.255.255.0">
+          Network: <input name="bgp_network[]">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);
@@ -245,9 +246,9 @@
     function addStaticRoute() {
       addField("static_routes", `
         <div>
-          Destination: <input name="static_dest[]" placeholder="192.168.10.0">
-          Mask: <input name="static_mask[]" placeholder="255.255.255.0">
-          Next Hop: <input name="static_nh[]" placeholder="10.0.0.2">
+          Destination: <input name="static_dest[]">
+          Mask: <input name="static_mask[]">
+          Next Hop: <input name="static_nh[]">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);
@@ -257,8 +258,8 @@
     function addStaticRouteV6() {
       addField("static_routes_v6", `
         <div>
-          Destination: <input name="staticv6_dest[]" placeholder="2001:db8:1::/64">
-          Next Hop: <input name="staticv6_nh[]" placeholder="2001:db8::2">
+          Destination: <input name="staticv6_dest[]">
+          Next Hop: <input name="staticv6_nh[]">
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);
@@ -339,7 +340,7 @@
       </div>
     </div>
 
-    <!-- Static Routes -->
+    <!-- Static Routes (IPv4) -->
     <div class="accordion-section">
       <button type="button" class="accordion-header">Static Routes (IPv4)</button>
       <div class="accordion-content">

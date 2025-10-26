@@ -1,9 +1,10 @@
 {% if routing.ospf is defined and routing.ospf.enabled %}
 ! OSPF Configuration
 config t
+ip routing
 router ospf {{ routing.ospf.process_id }}
 {% for net in routing.ospf.networks %}
- network {{ net }}
+ network {{ net.network }} area {{ net.area }}
 {% endfor %}
 end
 {% else %}
