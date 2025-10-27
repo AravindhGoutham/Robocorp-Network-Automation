@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Push Configs</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      padding-top: 40px;
+    }
+
+    h2 {
+      color: #00bfff;
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);
+    }
+
+    form {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+      text-align: left;
+    }
+
+    input, select {
+      margin: 5px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #00bfff;
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      width: 250px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background: #00bfff;
+      color: #111;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    input[type="submit"]:hover {
+      background: #66d9ff;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+      overflow-x: auto;
+      color: #00ffcc;
+    }
+
+    a {
+      color: #00bfff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1em;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>Push Configuration to Device</h2>
+
+  <form method="POST">
+    <label>Device IP:</label><br>
+    <input type="text" name="device_ip" required><br>
+
+    <label>Username:</label><br>
+    <input type="text" name="username" required><br>
+
+    <label>Password:</label><br>
+    <input type="password" name="password" required><br>
+
+    <label>Config File:</label><br>
+    <select name="config_file" required>
+      <option value="">-- Select Config File --</option>
+      {% for file in config_files %}
+        <option value="{{ file }}">{{ file }}</option>
+      {% endfor %}
+    </select><br>
+
+    <input type="submit" value="Push Config">
+  </form>
+
+  {% if result %}
+    <div class="result">{{ result | safe }}</div>
+  {% endif %}
+
+  <br><a href="/">← Back to Dashboard</a>
+</body>
+</html>

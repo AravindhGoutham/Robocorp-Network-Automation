@@ -44,6 +44,46 @@ def ip_exists_in_ipam(ip):
         print(f"Error reading IPAM file: {e}")
         return False
 
+# ---- Push Configs ----
+@app.route("/push_config", methods=["GET", "POST"])
+def push_config():
+    config_files = os.listdir(CONFIG_DIR)  # List available config files
+    result = None
+
+    if request.method == "POST":
+        ip = request.form.get("device_ip")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        file_name = request.form.get("config_file")
+
+        config_path = os.path.join(CONFIG_DIR, file_name)
+
+        if not os.path.exists(config_path):
+            result = f"❌ Config file '{file_name}' not found."
+        else:
+            try:
+                connection = ConnectHandler(
+                    device_type="cisco_ios",  # or arista_eos / linux if needed
+                    host=ip,
+                    username=username,
+                    password=password
+                )
+
+                connection.enable()
+                with open(config_path) as f:
+                    lines = f.read().splitlines()
+
+                output = connection.send_config_set(lines)
+                connection.save_config()
+                connection.disconnect()
+
+                result = f"✅ Configuration pushed successfully to {ip}<br><pre>{output}</pre>"
+
+            except Exception as e:
+                result = f"❌ Error pushing config: {e}"
+
+    return render_template("push_config.html", config_files=config_files, result=result)
+
 
 @app.route("/")
 def index():
@@ -156,7 +196,8 @@ def generate():
     ospf = {
         "enabled": bool(request.form.get("ospf_process")),
         "process_id": request.form.get("ospf_process"),
-        "networks": ospf_networks
+        "networks": ospf_networks,
+        "redistribute_bgp": request.form.get("ospf_redistribute_bgp") == "yes"
     }
 
     # ---------- RIP ----------

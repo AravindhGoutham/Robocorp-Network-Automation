@@ -1,11 +1,13 @@
 {% if routing.ospf is defined and routing.ospf.enabled %}
 ! OSPF Configuration
 config t
-ip routing
 router ospf {{ routing.ospf.process_id }}
 {% for net in routing.ospf.networks %}
  network {{ net.network }} area {{ net.area }}
 {% endfor %}
+{% if routing.ospf.redistribute_bgp %}
+ redistribute bgp
+{% endif %}
 end
 {% else %}
 ! OSPF not configured

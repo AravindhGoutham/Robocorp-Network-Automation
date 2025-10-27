@@ -1,0 +1,26 @@
+hostname: R991
+username: ''
+password: ''
+interfaces:
+- name: Ethernet 4
+  switchport_mode: 'no'
+  vlan: null
+  ipv4: 200.0.0.2/30
+  ipv6: null
+vlans: []
+routing:
+  ospf:
+    enabled: false
+    process_id: ''
+    networks: []
+    redistribute_bgp: false
+  rip:
+    enabled: false
+    networks: []
+  bgp:
+    enabled: false
+    as_number: ''
+    neighbors: []
+    networks: []
+static_routes: []
+static_routes_v6: []
