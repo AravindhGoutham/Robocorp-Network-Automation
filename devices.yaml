@@ -34,3 +34,11 @@
   device_type: arista_eos
   current_username: aravindh
   current_password: aravindh
+- host: 10.0.0.10
+  device_type: arista_eos
+  current_username: admin
+  current_password: admin
+- host: 10.0.0.11
+  device_type: arista_eos
+  current_username: admin
+  current_password: admin

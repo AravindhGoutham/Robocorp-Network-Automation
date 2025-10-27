@@ -23,17 +23,16 @@ os.makedirs(CONFIG_DIR, exist_ok=True)
 def ip_exists_in_ipam(ip):
     if not os.path.exists(IPAM_FILE):
         return False
-
     try:
         ip_input = ip.split("/")[0]
         with open(IPAM_FILE, newline="") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 ip_field = (
-                    row.get("ip_address") or
-                    row.get("cidr") or
-                    row.get("IP") or
-                    row.get("ip")
+                    row.get("ip_address")
+                    or row.get("cidr")
+                    or row.get("IP")
+                    or row.get("ip")
                 )
                 if ip_field:
                     ip_csv = ip_field.split("/")[0]
@@ -44,10 +43,11 @@ def ip_exists_in_ipam(ip):
         print(f"Error reading IPAM file: {e}")
         return False
 
+
 # ---- Push Configs ----
 @app.route("/push_config", methods=["GET", "POST"])
 def push_config():
-    config_files = os.listdir(CONFIG_DIR)  # List available config files
+    config_files = os.listdir(CONFIG_DIR)
     result = None
 
     if request.method == "POST":
@@ -63,10 +63,10 @@ def push_config():
         else:
             try:
                 connection = ConnectHandler(
-                    device_type="cisco_ios",  # or arista_eos / linux if needed
+                    device_type="cisco_ios",  # adjust if needed (arista_eos, etc.)
                     host=ip,
                     username=username,
-                    password=password
+                    password=password,
                 )
 
                 connection.enable()
@@ -78,13 +78,13 @@ def push_config():
                 connection.disconnect()
 
                 result = f"✅ Configuration pushed successfully to {ip}<br><pre>{output}</pre>"
-
             except Exception as e:
                 result = f"❌ Error pushing config: {e}"
 
     return render_template("push_config.html", config_files=config_files, result=result)
 
 
+# ---- Home Page ----
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -103,7 +103,7 @@ def config_diff():
             return render_template(
                 "config_diff_result.html",
                 device_ip=device_ip,
-                diff_output=diff_output
+                diff_output=diff_output,
             )
         except Exception as e:
             return f"<h3 style='color:red;'>Error: {e}</h3>"
@@ -161,15 +161,19 @@ def generate():
         errors = invalid_ips + duplicate_ips
         return render_template("error.html", hostname=hostname, errors=errors)
 
-    for n, ipv4, ipv6, mode, vlan in zip(i_names, i_ipv4s, i_ipv6s, i_modes, i_vlans):
+    for n, ipv4, ipv6, mode, vlan in zip(
+        i_names, i_ipv4s, i_ipv6s, i_modes, i_vlans
+    ):
         if n:
-            interfaces.append({
-                "name": n,
-                "switchport_mode": mode if mode else "no",
-                "vlan": vlan if vlan else None,
-                "ipv4": ipv4 if ipv4 else None,
-                "ipv6": ipv6 if ipv6 else None
-            })
+            interfaces.append(
+                {
+                    "name": n,
+                    "switchport_mode": mode if mode else "no",
+                    "vlan": vlan if vlan else None,
+                    "ipv4": ipv4 if ipv4 else None,
+                    "ipv6": ipv6 if ipv6 else None,
+                }
+            )
 
     # ---------- VLAN ----------
     vlans = []
@@ -188,22 +192,22 @@ def generate():
         net = net.strip()
         area = area.strip()
         if net:
-            ospf_networks.append({
-                "network": net,
-                "area": area if area else "0"   # Default area 0 if blank
-            })
+            ospf_networks.append(
+                {"network": net, "area": area if area else "0"}
+            )
 
     ospf = {
         "enabled": bool(request.form.get("ospf_process")),
         "process_id": request.form.get("ospf_process"),
         "networks": ospf_networks,
-        "redistribute_bgp": request.form.get("ospf_redistribute_bgp") == "yes"
+        "redistribute_bgp": request.form.get("ospf_redistribute_bgp") == "yes",
     }
 
     # ---------- RIP ----------
     rip = {
         "enabled": bool(request.form.getlist("rip_network[]")),
-        "networks": [n for n in request.form.getlist("rip_network[]") if n]
+        "networks": [n for n in request.form.getlist("rip_network[]") if n],
+        "redistribute_ospf": request.form.get("rip_redistribute_ospf") == "yes",
     }
 
     # ---------- BGP ----------
@@ -219,9 +223,10 @@ def generate():
         "as_number": request.form.get("bgp_as"),
         "neighbors": neighbors,
         "networks": [
-            {"network": n.split()[0], "mask": n.split()[1]} 
-            for n in request.form.getlist("bgp_network[]") if n
-        ]
+            {"network": n.split()[0], "mask": n.split()[1]}
+            for n in request.form.getlist("bgp_network[]")
+            if n
+        ],
     }
 
     # ---------- Static Routes ----------
@@ -232,11 +237,13 @@ def generate():
 
     for dest, mask, nh in zip(s_destinations, s_masks, s_next_hops):
         if dest and nh:
-            static_routes.append({
-                "destination": dest,
-                "mask": mask if mask else "255.255.255.0",
-                "next_hop": nh
-            })
+            static_routes.append(
+                {
+                    "destination": dest,
+                    "mask": mask if mask else "255.255.255.0",
+                    "next_hop": nh,
+                }
+            )
 
     # ---------- IPv6 Static Routes ----------
     static_routes_v6 = []
@@ -245,10 +252,7 @@ def generate():
 
     for dest6, nh6 in zip(s6_destinations, s6_next_hops):
         if dest6 and nh6:
-            static_routes_v6.append({
-                "destination": dest6,
-                "next_hop": nh6
-            })
+            static_routes_v6.append({"destination": dest6, "next_hop": nh6})
 
     # ---------- Device Data ----------
     device_data = {
@@ -259,7 +263,7 @@ def generate():
         "vlans": vlans,
         "routing": {"ospf": ospf, "rip": rip, "bgp": bgp},
         "static_routes": static_routes,
-        "static_routes_v6": static_routes_v6
+        "static_routes_v6": static_routes_v6,
     }
 
     # ---------- YAML Generation ----------
@@ -289,7 +293,7 @@ def generate():
         "output.html",
         hostname=hostname,
         yaml_content=yaml.dump(device_data, sort_keys=False),
-        rendered_config=rendered_config
+        rendered_config=rendered_config,
     )
 
 
@@ -317,7 +321,7 @@ def fetch_config(host):
             host=device_info["host"],
             username=device_info["current_username"],
             password=device_info["current_password"],
-            secret=device_info.get("current_password")
+            secret=device_info.get("current_password"),
         )
 
         connection.enable()
@@ -332,11 +336,7 @@ def fetch_config(host):
     except Exception as e:
         running_config = f"Error connecting to {host}\n\n{str(e)}"
 
-    return render_template(
-        "running_config.html",
-        host=host,
-        running_config=running_config
-    )
+    return render_template("running_config.html", host=host, running_config=running_config)
 
 
 if __name__ == "__main__":

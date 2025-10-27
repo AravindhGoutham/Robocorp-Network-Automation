@@ -5,6 +5,10 @@ router rip
 {% for net in routing.rip.networks %}
  network {{ net }}
 {% endfor %}
+{% if routing.rip.redistribute_ospf %}
+ redistribute ospf
+{% endif %}
+ip routing
  no shutdown
 end
 {% else %}
