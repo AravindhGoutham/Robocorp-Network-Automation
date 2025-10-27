@@ -5,6 +5,7 @@ no aaa root
 no username admin
 !
 username aravindh secret sha512 $6$94zRXKQx0.9c5svM$7SfZmtYyw2jo4qxQImAPJ0zGP66ali2purAm4y75UaBFbyMQfI/f16ZoccywIAJKzHGvlbkoFsvwAn0S9ZK5l1
+username network privilege 15 secret sha512 $6$s3YL7KHDYI4AYmoQ$q8JYUZi29nfJSBqMe43au8tK8av21ODoM6X4yyW1D8qBMoSN3F1qsTZaAbIn4O.euYK5WC8hr7udWFxl8G.R8/
 username user20251025_38 secret sha512 $6$B1eGoCixOjfIm/dh$b.drj8I9fk9r0onZmKAyRzhkx92v1ffwN5vGKsGM0HX63xUGUfJdWibgcBv59bW6gLBvOvZv1HIM9cLPzcqzJ0
 !
 management api http-commands
@@ -60,8 +61,9 @@ interface Ethernet5
    ip address 10.0.0.8/24
 !
 interface Management0
-   ip address 172.20.20.10/24
-   ipv6 address 3fff:172:20:20::a/64
+   ip address 172.20.20.7/24
+   ipv6 address 3fff:172:20:20::7/64
+   ipv6 address 3fff:172:20:20::12/64
 !
 ip routing
 !

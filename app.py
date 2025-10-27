@@ -63,7 +63,7 @@ def push_config():
         else:
             try:
                 connection = ConnectHandler(
-                    device_type="cisco_ios",  # adjust if needed (arista_eos, etc.)
+                    device_type="cisco_ios",
                     host=ip,
                     username=username,
                     password=password,
@@ -145,6 +145,8 @@ def generate():
     i_ipv6s = request.form.getlist("intf_ipv6[]")
     i_modes = request.form.getlist("intf_mode[]")
     i_vlans = request.form.getlist("intf_vlan[]")
+    i_ipv6_ospf = request.form.getlist("intf_ipv6_ospf[]")
+    i_ipv6_area = request.form.getlist("intf_ipv6_area[]")
 
     invalid_ips = []
     duplicate_ips = []
@@ -161,8 +163,8 @@ def generate():
         errors = invalid_ips + duplicate_ips
         return render_template("error.html", hostname=hostname, errors=errors)
 
-    for n, ipv4, ipv6, mode, vlan in zip(
-        i_names, i_ipv4s, i_ipv6s, i_modes, i_vlans
+    for n, ipv4, ipv6, mode, vlan, ipv6_ospf, ipv6_area in zip(
+        i_names, i_ipv4s, i_ipv6s, i_modes, i_vlans, i_ipv6_ospf, i_ipv6_area
     ):
         if n:
             interfaces.append(
@@ -172,6 +174,8 @@ def generate():
                     "vlan": vlan if vlan else None,
                     "ipv4": ipv4 if ipv4 else None,
                     "ipv6": ipv6 if ipv6 else None,
+                    "ipv6_ospf": ipv6_ospf == "yes",
+                    "ipv6_area": ipv6_area if ipv6_area else "0",
                 }
             )
 

@@ -1,13 +1,13 @@
 {% if interfaces %}
 ! Interface Configuration
 config t
+ipv6 unicast-routing
 {% for intf in interfaces %}
 interface {{ intf.name }}
 {% if intf.switchport_mode == 'access' %}
  switchport
  switchport access vlan {{ intf.vlan }}
 {% elif intf.switchport_mode == 'trunk' %}
- switchport
  switchport mode trunk
  switchport trunk allowed vlan all
 {% elif intf.switchport_mode == 'no' %}
@@ -22,7 +22,11 @@ interface {{ intf.name }}
 
 {% if intf.ipv6 %}
  ipv6 address {{ intf.ipv6 }}
+ {% if intf.ipv6_ospf %}
+  ipv6 ospf 1 area {{ intf.ipv6_area }}
+ {% endif %}
 {% endif %}
+
 {% endfor %}
 end
 {% else %}

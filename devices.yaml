@@ -1,44 +1,46 @@
 - host: 10.0.0.2
   device_type: arista_eos
-  current_username: user20251025_77
-  current_password: 6C+Bw#loeH2kUvfz
+  current_username: aravindh
+  current_password: aravindh
 - host: 10.0.0.3
-  device_type: arista_eos
-  current_username: user20251025_68
-  current_password: '*GWZK8ThvpN0i_1*'
-- host: 10.0.0.4
-  device_type: arista_eos
-  current_username: user20251025_30
-  current_password: 2xDZKbwwupWi39%y
-- host: 10.0.0.5
-  device_type: arista_eos
-  current_username: user20251025_89
-  current_password: p(vX!vwjVvi#Dd$2
-- host: 10.0.0.6
-  device_type: arista_eos
-  current_username: user20251025_68
-  current_password: XE-LQB!)L_27R@qB
-- host: 10.0.0.7
-  device_type: arista_eos
-  current_username: user20251025_25
-  current_password: Yme6LeYZIfoUUviD
-- host: 10.0.0.8
-  device_type: arista_eos
-  current_username: user20251025_38
-  current_password: '@VBm=vJcc04anGhz'
-- host: 10.0.0.9
-  device_type: arista_eos
-  current_username: user20251025_83
-  current_password: 3oo$w9e6Q#w_=j62
-- host: 172.20.20.17
   device_type: arista_eos
   current_username: aravindh
   current_password: aravindh
-- host: 10.0.0.10
+- host: 10.0.0.4
   device_type: arista_eos
-  current_username: admin
-  current_password: admin
-- host: 10.0.0.11
+  current_username: aravindh
+  current_password: aravindh
+- host: 10.0.0.5
   device_type: arista_eos
-  current_username: admin
-  current_password: admin
+  current_username: aravindh
+  current_password: aravindh
+- host: 10.0.0.6
+  device_type: arista_eos
+  current_username: aravindh
+  current_password: aravindh
+- host: 10.0.0.7
+  device_type: arista_eos
+  current_username: aravindh
+  current_password: aravindh
+- host: 10.0.0.8
+  device_type: arista_eos
+  current_username: aravindh
+  current_password: aravindh
+- host: 10.0.0.9
+  device_type: arista_eos
+  current_username: aravindh
+  current_password: aravindh
+- host: 172.20.20.21
+  device_type: arista_eos
+  current_username: aravindh
+  current_password: aravindh
+
+#- host: 10.0.0.10
+# device_type: arista_eos
+#current_username: user20251027_46
+#  current_password: hu9Vxmx&#GkAjwa5
+#- host: 10.0.0.11
+#  device_type: arista_eos
+#  current_username: user20251027_39
+#  current_password: WQ-HOkDOEq(y_Uk-
+

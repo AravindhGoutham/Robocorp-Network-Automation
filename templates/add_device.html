@@ -171,7 +171,7 @@
       container.appendChild(div);
     }
 
-    // Interface
+    // Interface (now includes IPv6 OSPF toggle + Area)
     function addInterface() {
       addField("interfaces", `
         <div class="interface-item">
@@ -184,7 +184,16 @@
             <option value="trunk">trunk</option>
             <option value="no">no</option>
           </select>
-          VLAN: <input name="intf_vlan[]">
+          VLAN: <input name="intf_vlan[]"><br>
+          
+          Enable IPv6 OSPF:
+          <select name="intf_ipv6_ospf[]">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes</option>
+          </select>
+          Area ID:
+          <input name="intf_ipv6_area[]" placeholder="0">
+          
           <button type="button" onclick="this.parentElement.remove()">Remove</button>
         </div>
       `);

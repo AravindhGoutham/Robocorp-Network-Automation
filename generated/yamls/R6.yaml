@@ -1,0 +1,39 @@
+hostname: R6
+username: aravindh
+password: aravindh
+interfaces:
+- name: Ethernet 1
+  switchport_mode: 'no'
+  vlan: null
+  ipv4: 192.168.0.30/30
+  ipv6: 2001:8::2/64
+  ipv6_ospf: true
+  ipv6_area: '0'
+- name: Ethernet 2
+  switchport_mode: 'no'
+  vlan: null
+  ipv4: 192.168.0.33/30
+  ipv6: 2001:9::1/64
+  ipv6_ospf: true
+  ipv6_area: '0'
+vlans: []
+routing:
+  ospf:
+    enabled: true
+    process_id: '1'
+    networks:
+    - network: 192.168.0.28/30
+      area: '10'
+    redistribute_bgp: false
+  rip:
+    enabled: true
+    networks:
+    - 192.168.0.32/30
+    redistribute_ospf: true
+  bgp:
+    enabled: false
+    as_number: ''
+    neighbors: []
+    networks: []
+static_routes: []
+static_routes_v6: []
