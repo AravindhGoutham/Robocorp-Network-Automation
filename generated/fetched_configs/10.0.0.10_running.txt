@@ -1,0 +1,78 @@
+! Command: show running-config
+! device: R6 (cEOSLab, EOS-4.34.2F-43232954.4342F.1 (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$WWwU7M4jN8GhDjmv$qY9tTiGR5aKNet7gvHCCdqQBSIv62RW1szqjZDrm6CR.AERResFJo2dFiDwK6BRSFs7vIO51W6CovLpQdflmU/
+username user20251102_20 secret sha512 $6$t7BTFJ4/e.oSMwd5$hkWQfRq4zm5oK1w7MwU2kbyDGCmxhyf2r3i7Mz6ONM.dIMRSkrR3byEyJvTdXAw49v3SiINDUkPezqp8Mx.zL1
+!
+management api http-commands
+   no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname R6
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+interface Ethernet1
+   no switchport
+   ip address 192.168.0.30/30
+   ipv6 address 2001:8::2/64
+   ipv6 ospf 1 area 0.0.0.0
+!
+interface Ethernet2
+   no switchport
+   ip address 192.168.0.33/30
+   ipv6 address 2001:9::1/64
+   ipv6 ospf 1 area 0.0.0.0
+!
+interface Ethernet5
+   no switchport
+   ip address 10.0.0.10/24
+!
+interface Management0
+   ip address 172.20.20.20/24
+   ipv6 address 3fff:172:20:20::14/64
+!
+ip routing
+!
+ipv6 unicast-routing
+!
+ip route 0.0.0.0/0 172.20.20.1
+!
+ipv6 route ::/0 3fff:172:20:20::1
+!
+router multicast
+   ipv4
+      software-forwarding kernel
+   !
+   ipv6
+      software-forwarding kernel
+!
+router ospf 1
+   redistribute rip
+   network 192.168.0.28/30 area 0.0.0.10
+   max-lsa 12000
+!
+router rip
+   network 192.168.0.32/30
+   redistribute ospf match internal
+   redistribute ospf match external
+   no shutdown
+!
+end
