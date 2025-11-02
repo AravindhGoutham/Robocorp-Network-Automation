@@ -1,46 +1,40 @@
 - host: 10.0.0.2
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
+  current_username: user20251102_11
+  current_password: jj50ZCm128VE2lqZ
 - host: 10.0.0.3
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
+  current_username: user20251102_65
+  current_password: ndQu5z-tI5Y4M=X)
 - host: 10.0.0.4
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
+  current_username: user20251102_41
+  current_password: 6-Ax$=yJKtEiiii6
 - host: 10.0.0.5
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
+  current_username: user20251102_47
+  current_password: k&-ZYL!D-4+0wU0U
 - host: 10.0.0.6
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
+  current_username: user20251102_81
+  current_password: '@h#yG-0@&NmEk-TH'
 - host: 10.0.0.7
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
+  current_username: user20251102_75
+  current_password: (u*gN8WKxVgI4_vN
 - host: 10.0.0.8
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
+  current_username: user20251102_58
+  current_password: fv-IdKx&6aT2d=uz
 - host: 10.0.0.9
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
-- host: 172.20.20.21
+  current_username: user20251102_80
+  current_password: n4LN-jyZPqUMFwEG
+- host: 10.0.0.10
   device_type: arista_eos
-  current_username: aravindh
-  current_password: aravindh
-
-#- host: 10.0.0.10
-# device_type: arista_eos
-#current_username: user20251027_46
-#  current_password: hu9Vxmx&#GkAjwa5
-#- host: 10.0.0.11
-#  device_type: arista_eos
-#  current_username: user20251027_39
-#  current_password: WQ-HOkDOEq(y_Uk-
-
+  current_username: user20251102_20
+  current_password: =GuXoqzkkQ4RU*ZS
+- host: 10.0.0.11
+  device_type: arista_eos
+  current_username: user20251102_70
+  current_password: hj-j5YZTX$ZI0K-4
