@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Run Show Commands</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h2 {
+      color: #00bfff;
+      text-shadow: 0 0 10px rgba(0,191,255,0.6);
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.2);
+      text-align: left;
+    }
+
+    select, input {
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #00bfff;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      width: 100%;
+    }
+
+    input[type="submit"] {
+      background: #00bfff;
+      color: #111;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+    }
+
+    input[type="submit"]:hover {
+      background: #66d9ff;
+    }
+
+    pre {
+      text-align: left;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      color: #00ffb7;
+    }
+
+    .result-box {
+      width: 80%;
+      margin: 30px auto;
+    }
+
+    a {
+      color: #00bfff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Run Show Commands</h2>
+
+  <form method="POST" action="/run_show">
+    <label>Device IP:</label>
+    <select name="device_ip" required>
+      <option value="">Select a device</option>
+      {% for ip in devices %}
+      <option value="{{ ip }}">{{ ip }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Username:</label>
+    <input type="text" name="username">
+
+    <label>Password:</label>
+    <input type="password" name="password">
+
+    <label>Command:</label>
+    <select name="command" required>
+      <option value="">Select a command</option>
+      {% for cmd in commands %}
+      <option value="{{ cmd }}">{{ cmd }}</option>
+      {% endfor %}
+    </select>
+
+    <input type="submit" value="Run Command">
+  </form>
+
+  {% if result %}
+  <div class="result-box">
+    <h3>Result:</h3>
+    <div>{{ result|safe }}</div>
+  </div>
+  {% endif %}
+
+  <div style="margin-top: 20px;">
+    <a href="/">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

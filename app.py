@@ -341,6 +341,73 @@ def fetch_config(host):
         running_config = f"Error connecting to {host}\n\n{str(e)}"
 
     return render_template("running_config.html", host=host, running_config=running_config)
+# ---- Run Show Commands ----
+@app.route("/run_show", methods=["GET", "POST"])
+def run_show():
+    # --- Load device list dynamically from devices.yaml ---
+    try:
+        with open("devices.yaml") as f:
+            devices = yaml.safe_load(f)
+            device_list = [d["host"] for d in devices if "host" in d]
+    except Exception as e:
+        device_list = []
+        print(f"Error reading devices.yaml: {e}")
+
+    # --- Predefined common show commands ---
+    commands = [
+        "show ip interface brief",
+        "show interfaces status",
+        "show ip ospf neighbor",
+        "show ip bgp summary",
+        "show ipv6 ospf neighbor",
+        "show ip arp",
+        "show ip route",
+        "show ip ospf database",
+        "show lldp neighbor",
+	"show ipv6 int b",
+    ]
+
+    result = None
+
+    # --- When form is submitted ---
+    if request.method == "POST":
+        ip = request.form.get("device_ip")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        command = request.form.get("command")
+
+        try:
+            # Match the selected IP to device info in YAML
+            with open("devices.yaml") as f:
+                devices = yaml.safe_load(f)
+            device_info = next((d for d in devices if str(d["host"]) == str(ip)), None)
+
+            if not device_info:
+                result = f"<b style='color:red;'>Device {ip} not found in devices.yaml</b>"
+            else:
+                # Connect and run the command
+                connection = ConnectHandler(
+                    device_type=device_info.get("device_type", "cisco_ios"),
+                    host=device_info["host"],
+                    username=username or device_info.get("current_username"),
+                    password=password or device_info.get("current_password"),
+                    secret=password or device_info.get("current_password"),
+                )
+
+                connection.enable()
+                output = connection.send_command(command)
+                connection.disconnect()
+
+                result = (
+                    f"<b>Device:</b> {ip}<br>"
+                    f"<b>Command:</b> {command}<br><br>"
+                    f"<pre>{output}</pre>"
+                )
+
+        except Exception as e:
+            result = f"<b style='color:red;'>Error connecting to {ip}: {e}</b>"
+
+    return render_template("run_show.html", devices=device_list, commands=commands, result=result)
 
 
 if __name__ == "__main__":
