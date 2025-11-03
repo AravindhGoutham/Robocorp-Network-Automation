@@ -1,10 +1,10 @@
 ! Command: show running-config
-! device: R7 (cEOSLab, EOS-4.34.2F-43232954.4342F.1 (engineering build))
+! device: R8 (cEOSLab, EOS-4.34.2F-43232954.4342F.1 (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$Ca64OCkgTRIju1Nd$oaUliocW7iHiqq3.UwREpNefHr1y2k6jNTp.Gzgl/ugIZT4hM6IBBtR8VrPV/RJkJOcRJAWJD8I6Yma/1gr33/
-username user20251103_59 secret sha512 $6$COoXGAoQh4jE2dR8$frzjnqlZM/XbvIgUWjKq8N6Bux74efSIjyl.jN.byEc.t2A1sIED7I49nZm7LpjDo1eMERCDrcgYDRMLkuwWY.
+username admin privilege 15 role network-admin secret sha512 $6$0KVaK8hANt30EN1p$rkjWknJlXLtX79E6vyswtodIR.or4xnXjBkTz4wxBN0CQpfkaMbFwJrAkOettSHWTU3TWkp983kRckGYjeCbH0
+username aravindh privilege 15 secret sha512 $6$hXka2A8Ovic.T1Gy$6t5v1vbXgSE5SBczXLPfuKgUL83bUmFqurb2UxkD7.dODbJMWj//A7L9sIHUS2zrFuREQIphObtQTsSHKSAPz.
 !
 management api http-commands
    no shutdown
@@ -15,7 +15,7 @@ transceiver qsfp default-mode 4x10G
 !
 service routing protocols model multi-agent
 !
-hostname R7
+hostname R8
 !
 spanning-tree mode mstp
 !
@@ -31,23 +31,19 @@ management api netconf
 !
 interface Ethernet1
    no switchport
-   ip address 192.168.0.34/30
-   ipv6 address 2001:9::2/64
-   ipv6 ospf 1 area 0.0.0.0
+   ip address 192.168.0.38/30
 !
 interface Ethernet2
    no switchport
-   ip address 10.10.0.1/24
-   ipv6 address 2001:ab::1/64
-   ipv6 ospf 1 area 0.0.0.0
+   ip address 10.10.10.1/24
 !
 interface Ethernet5
    no switchport
-   ip address 10.0.0.11/24
+   ip address dhcp
 !
 interface Management0
-   ip address 172.20.20.22/24
-   ipv6 address 3fff:172:20:20::16/64
+   ip address 172.20.20.10/24
+   ipv6 address 3fff:172:20:20::a/64
 !
 ip routing
 !
@@ -64,9 +60,9 @@ router multicast
    ipv6
       software-forwarding kernel
 !
-router rip
-   network 10.10.0.0/24
-   network 192.168.0.32/30
-   no shutdown
+router ospf 1
+   network 10.10.10.0/24 area 0.0.0.20
+   network 192.168.0.36/30 area 0.0.0.20
+   max-lsa 12000
 !
 end

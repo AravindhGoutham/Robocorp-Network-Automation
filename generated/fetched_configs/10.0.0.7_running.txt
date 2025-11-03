@@ -6,7 +6,7 @@ no username admin
 !
 username network privilege 15 secret sha512 $6$0vhZaG3hNIHhexTo$5hZ3qN39/gR3/18Tez/BvVcSfu7qQcTcxhNpHKuLCXoozHTrp8Tlhy.Er6Qyo3z2Pp8aKY7Dwfb9DFir6cH6L1
 username user20251025_25 secret sha512 $6$EsA.q9/aIBpYRxtO$KJJwasnMu10Dch2YNYhtS2wUiVmUHoaCDLvuEQfQZwWuLj1NMeW7q1ezztwa0QP79T/i4VwHCHg9WSYYfJeYd.
-username user20251102_75 secret sha512 $6$wa94azH.iF1ZKHvd$9GwMii4kptsAS/O7djBhVYCEx4jC.RD9BrA.fqlPKFrWTeyUdxqQpcnmoUTbtWo./cFcbm1X0Wffn4oZv/VS9/
+username user20251103_80 secret sha512 $6$7R.9rWb7Lvocm/jb$h3L5j0hzCVzfVundBCdarkhw7YgRE9CWlce4pV9BUBn0u/c/wF8FQPIb7cueI/Tap/x4HfU/3GGohnlUAEfmi/
 !
 management api http-commands
    protocol http port 50001
@@ -67,10 +67,8 @@ interface Ethernet5
    ip address 10.0.0.7/24
 !
 interface Management0
-   ip address 172.20.20.8/24
-   ipv6 address 3fff:172:20:20::8/64
-   ipv6 address 3fff:172:20:20::13/64
-   ipv6 address 3fff:172:20:20::14/64
+   ip address 172.20.20.15/24
+   ipv6 address 3fff:172:20:20::f/64
 !
 ip routing
 !

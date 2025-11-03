@@ -42,3 +42,7 @@
   device_type: arista_eos
   current_username: admin
   current_password: admin
+- host: 10.0.0.13
+  device_type: arista_eos
+  current_username: admin
+  current_password: admin

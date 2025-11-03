@@ -4,7 +4,7 @@ from netmiko import ConnectHandler
 
 DEVICES_FILE = "devices.yaml"
 
-OSPF_DEVICES = ["10.0.0.4", "10.0.0.5", "10.0.0.6", "10.0.0.7", "10.0.0.8", "10.0.0.9"]
+OSPF_DEVICES = ["10.0.0.4", "10.0.0.5", "10.0.0.6", "10.0.0.7", "10.0.0.8", "10.0.0.9", "10.0.0.12"]
 BGP_DEVICES = ["10.0.0.8", "10.0.0.9"]
 
 
