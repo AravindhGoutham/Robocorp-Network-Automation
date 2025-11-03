@@ -60,12 +60,12 @@ def push_config():
         config_path = os.path.join(CONFIG_DIR, file_name)
 
         if not os.path.exists(config_path):
-            result = f"❌ Config file '{file_name}' not found."
+            result = f"Config file '{file_name}' not found."
         else:
             try:
                 # --- Push configuration to the device ---
                 connection = ConnectHandler(
-                    device_type="cisco_ios",
+                    device_type="arista_eos",
                     host=ip,
                     username=username,
                     password=password,
@@ -382,10 +382,10 @@ def fetch_config(host):
         running_config = f"Error connecting to {host}\n\n{str(e)}"
 
     return render_template("running_config.html", host=host, running_config=running_config)
+
 # ---- Run Show Commands ----
 @app.route("/run_show", methods=["GET", "POST"])
 def run_show():
-    # --- Load device list dynamically from devices.yaml ---
     try:
         with open("devices.yaml") as f:
             devices = yaml.safe_load(f)
@@ -394,7 +394,6 @@ def run_show():
         device_list = []
         print(f"Error reading devices.yaml: {e}")
 
-    # --- Predefined common show commands ---
     commands = [
         "show ip interface brief",
         "show interfaces status",
@@ -411,7 +410,6 @@ def run_show():
 
     result = None
 
-    # --- When form is submitted ---
     if request.method == "POST":
         ip = request.form.get("device_ip")
         username = request.form.get("username")
@@ -419,7 +417,6 @@ def run_show():
         command = request.form.get("command")
 
         try:
-            # Match the selected IP to device info in YAML
             with open("devices.yaml") as f:
                 devices = yaml.safe_load(f)
             device_info = next((d for d in devices if str(d["host"]) == str(ip)), None)
@@ -427,7 +424,6 @@ def run_show():
             if not device_info:
                 result = f"<b style='color:red;'>Device {ip} not found in devices.yaml</b>"
             else:
-                # Connect and run the command
                 connection = ConnectHandler(
                     device_type=device_info.get("device_type", "cisco_ios"),
                     host=device_info["host"],
