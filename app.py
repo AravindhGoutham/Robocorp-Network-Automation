@@ -406,6 +406,7 @@ def run_show():
         "show ip ospf database",
         "show lldp neighbor",
 	"show ipv6 int brief",
+	"show run",
     ]
 
     result = None

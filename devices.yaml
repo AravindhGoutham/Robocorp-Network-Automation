@@ -38,3 +38,7 @@
   device_type: arista_eos
   current_username: user20251103_59
   current_password: CzEAFD@m)4(Nr=cz
+- host: 10.0.0.12
+  device_type: arista_eos
+  current_username: admin
+  current_password: admin

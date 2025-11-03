@@ -11,6 +11,7 @@ hostname,interface,cidr,status
 10.0.0.5,Ethernet1.10,192.168.10.2/24,up
 10.0.0.5,Ethernet1.20,192.168.20.2/24,up
 10.0.0.5,Ethernet2,192.168.0.26/30,up
+10.0.0.5,Ethernet3,192.168.0.37/30,up
 10.0.0.5,Ethernet5,10.0.0.5/24,up
 10.0.0.5,Management0,172.20.20.19/24,up
 10.0.0.6,Ethernet1,192.168.0.21/30,up
@@ -40,3 +41,7 @@ hostname,interface,cidr,status
 10.0.0.11,Ethernet2,10.10.0.1/24,up
 10.0.0.11,Ethernet5,10.0.0.11/24,up
 10.0.0.11,Management0,172.20.20.22/24,up
+10.0.0.12,Ethernet1,192.168.0.38/30,up
+10.0.0.12,Ethernet2,10.10.10.1/24,up
+10.0.0.12,Ethernet5,10.0.0.12/24,up
+10.0.0.12,Management0,172.20.20.10/24,up
