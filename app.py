@@ -43,10 +43,11 @@ def ip_exists_in_ipam(ip):
         print(f"Error reading IPAM file: {e}")
         return False
 
-
 # ---- Push Configs ----
 @app.route("/push_config", methods=["GET", "POST"])
 def push_config():
+    import requests
+
     config_files = os.listdir(CONFIG_DIR)
     result = None
 
@@ -62,6 +63,7 @@ def push_config():
             result = f"❌ Config file '{file_name}' not found."
         else:
             try:
+                # --- Push configuration to the device ---
                 connection = ConnectHandler(
                     device_type="cisco_ios",
                     host=ip,
@@ -77,9 +79,48 @@ def push_config():
                 connection.save_config()
                 connection.disconnect()
 
-                result = f"✅ Configuration pushed successfully to {ip}<br><pre>{output}</pre>"
+                result = f"Configuration pushed successfully to {ip}<br><pre>{output}</pre>"
+
+                # --- Trigger Jenkins pipeline ---
+                try:
+                    JENKINS_URL = "http://localhost:8080"
+                    JOB_NAME = "Unit-test"
+                    TOKEN = "Unit-test"
+                    USERNAME = "Aravindh"
+                    API_TOKEN = "11381987b78492f783ccce0512e2dd51b5"
+
+                    trigger_url = f"{JENKINS_URL}/job/{JOB_NAME}/buildWithParameters"
+
+                    payload = {
+                        "token": TOKEN,
+                        "device_ip": ip,
+                        "config_file": file_name,
+                    }
+
+                    response = requests.post(
+                        trigger_url,
+                        params=payload,
+                        auth=(USERNAME, API_TOKEN),
+                        timeout=10,
+                    )
+
+                    if response.status_code in [200, 201]:
+                        result += (
+                            "<br><b style='color:lime;'>Jenkins pipeline triggered successfully.</b>"
+                            f"<br><a href='{JENKINS_URL}/job/{JOB_NAME}/' target='_blank' style='color:#00bfff;'>"
+                            "View Jenkins Job</a>"
+                        )
+                    else:
+                        result += (
+                            f"<br><b style='color:orange;'>Jenkins trigger failed (HTTP {response.status_code}).</b>"
+                            f"<br><pre>{response.text}</pre>"
+                        )
+
+                except Exception as je:
+                    result += f"<br><b style='color:red;'>Jenkins trigger error: {je}</b>"
+
             except Exception as e:
-                result = f"❌ Error pushing config: {e}"
+                result = f"Error pushing config: {e}"
 
     return render_template("push_config.html", config_files=config_files, result=result)
 
@@ -364,7 +405,7 @@ def run_show():
         "show ip route",
         "show ip ospf database",
         "show lldp neighbor",
-	"show ipv6 int b",
+	"show ipv6 int brief",
     ]
 
     result = None

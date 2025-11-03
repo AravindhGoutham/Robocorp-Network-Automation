@@ -1,12 +1,28 @@
 pipeline {
     agent any
 
+    // Parameters expected from Flask trigger
+    parameters {
+        string(name: 'device_ip', defaultValue: '', description: 'Device IP triggering this build')
+        string(name: 'config_file', defaultValue: '', description: 'Config file that was pushed')
+    }
+
     environment {
         PROJECT_DIR = "/home/student/Network-Automation"
         VENV        = "${PROJECT_DIR}/venv"
     }
 
     stages {
+
+        stage('Trigger Info') {
+            steps {
+                echo "========================================"
+                echo "Triggered by Flask automation"
+                echo "Device IP   : ${params.device_ip}"
+                echo "Config File : ${params.config_file}"
+                echo "========================================"
+            }
+        }
 
         /* -------------------- Setup -------------------- */
         stage('Setup Environment') {
@@ -27,7 +43,7 @@ pipeline {
                         python3 -m venv "$VENV"
                     fi
 
-                    # Install all dependencies needed for all tests
+                    # Install dependencies
                     $VENV/bin/pip install --upgrade pip
                     $VENV/bin/pip install netmiko pyyaml prettytable jinja2 ipaddress
                 '''
@@ -73,7 +89,7 @@ pipeline {
             }
         }
 
-        /* -------------------- Ping Test (Webserver Reachability) -------------------- */
+        /* -------------------- Ping Test -------------------- */
         stage('Ping Webserver (8.8.8.8)') {
             steps {
                 echo 'Running ping test for external reachability...'
@@ -100,13 +116,12 @@ pipeline {
         }
     }
 
-    /* -------------------- Post Actions -------------------- */
     post {
         success {
-            echo 'All validation tests passed successfully!'
+            echo '✅ All validation tests passed successfully!'
         }
         failure {
-            echo 'Some validation tests failed. Check logs above.'
+            echo '❌ Some validation tests failed. Check logs above.'
         }
         always {
             echo 'Pipeline execution complete.'
