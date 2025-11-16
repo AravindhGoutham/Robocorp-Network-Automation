@@ -1,0 +1,11 @@
+snmp-server enable traps bgp
+router bgp 333
+   neighbor 192.168.0.1 remote-as 555
+   neighbor 2001:7::1 remote-as 555
+   !
+   address-family ipv6
+      neighbor 2001:7::1 activate
+router ospf 1
+   redistribute bgp
+ipv6 router ospf 1
+   redistribute bgp

@@ -14,10 +14,11 @@ env = Environment(loader=FileSystemLoader("templates"))
 YAML_DIR = "generated/yamls"
 CONFIG_DIR = "generated/configs"
 IPAM_FILE = "IPAM_Robocorp.csv"
+GOLDEN_STATE_DIR = "generated/golden_states"
 
 os.makedirs(YAML_DIR, exist_ok=True)
 os.makedirs(CONFIG_DIR, exist_ok=True)
-
+os.makedirs(GOLDEN_STATE_DIR, exist_ok=True)
 
 # ---- Check for duplicate IPs in IPAM ----
 def ip_exists_in_ipam(ip):
@@ -42,6 +43,79 @@ def ip_exists_in_ipam(ip):
     except Exception as e:
         print(f"Error reading IPAM file: {e}")
         return False
+
+# ---- Golden State ----
+@app.route("/golden_state", methods=["GET", "POST"])
+def golden_state():
+    try:
+        with open("devices.yaml") as f:
+            devices = yaml.safe_load(f)
+    except Exception as e:
+        return f"<h3 style='color:red;'>Error reading devices.yaml: {e}</h3>"
+
+    device_list = [d["host"] for d in devices if "host" in d]
+
+    result = None
+
+    if request.method == "POST":
+        selected_ip = request.form.get("device_ip")
+
+        device_info = next(
+            (d for d in devices if str(d["host"]) == str(selected_ip)), None
+        )
+
+        if not device_info:
+            result = f"<b style='color:red;'>Device {selected_ip} not found in devices.yaml</b>"
+        else:
+            try:
+                connection = ConnectHandler(
+                    device_type=device_info.get("device_type", "cisco_ios"),
+                    host=device_info["host"],
+                    username=device_info.get("current_username"),
+                    password=device_info.get("current_password"),
+                    secret=device_info.get("current_password"),
+                )
+
+                connection.enable()
+
+                commands = {
+                    "show ip interface brief": "Interface-status.txt",
+                    "show ip route": "IP-route.txt",
+                    "show ip ospf neighbor": "OSPF-neighborship.txt",
+                    "show ip bgp summary": "BGP-summary.txt",
+                    "show ip ospf interface": "OSPF-Interfaces.txt",
+                    "show run | sec ospf": "OSPF-details.txt",
+                    "show run | sec bgp": "BGP-details.txt",
+                }
+
+                device_dir = os.path.join(GOLDEN_STATE_DIR, str(selected_ip))
+                os.makedirs(device_dir, exist_ok=True)
+
+                saved_files = []
+
+                for cmd, filename in commands.items():
+                    output = connection.send_command(cmd)
+                    file_path = os.path.join(device_dir, filename)
+                    with open(file_path, "w") as f:
+                        f.write(output)
+                    saved_files.append(file_path)
+
+                connection.disconnect()
+
+                result = (
+                    f"<b style='color:lime;'>Golden state captured for {selected_ip}</b><br>"
+                    f"<b>Saved files:</b><br>"
+                    + "<br>".join(saved_files)
+                )
+
+            except Exception as e:
+                result = f"<b style='color:red;'>Error connecting to {selected_ip}: {e}</b>"
+
+    return render_template(
+        "golden_state.html",
+        devices=device_list,
+        result=result,
+    )
 
 # ---- Push Configs ----
 @app.route("/push_config", methods=["GET", "POST"])

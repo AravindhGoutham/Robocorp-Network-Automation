@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Golden State Capture</title>
+    <style>
+        body {
+            background-color: #101010;
+            color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 70%;
+            margin: 40px auto;
+            background-color: #1e1e1e;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #000;
+        }
+        h1 {
+            color: #00bfff;
+        }
+        select, button {
+            padding: 8px 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background-color: #181818;
+            color: #f0f0f0;
+        }
+        button {
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00bfff;
+            color: #000;
+        }
+        pre {
+            background-color: #000;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        a {
+            color: #00bfff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Golden State Capture</h1>
+
+    <form method="POST">
+        <label for="device_ip">Select Device:</label><br>
+        <select name="device_ip" id="device_ip" required>
+            <option value="" disabled selected>-- choose device --</option>
+            {% for ip in devices %}
+                <option value="{{ ip }}">{{ ip }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Fetch Golden State</button>
+    </form>
+
+    <hr>
+
+    {% if result %}
+        <h2>Result</h2>
+        <div>{{ result|safe }}</div>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</div>
+</body>
+</html>

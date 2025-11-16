@@ -1,0 +1,2 @@
+Neighbor ID     Instance VRF      Pri State                  Dead Time   Address         Interface
+192.168.0.21    1        default  1   FULL/DR                00:00:38    192.168.0.10    Ethernet1

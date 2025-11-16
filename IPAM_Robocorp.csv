@@ -45,3 +45,5 @@ hostname,interface,cidr,status
 10.0.0.12,Ethernet2,10.10.10.1/24,up
 10.0.0.12,Ethernet5,10.0.0.12/24,up
 10.0.0.12,Management0,172.20.20.10/24,up
+10.0.0.13,Ethernet5,10.0.0.13/24,up
+10.0.0.13,Management0,172.20.20.21/24,up

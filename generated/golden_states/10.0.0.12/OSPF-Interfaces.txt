@@ -1,0 +1,24 @@
+Ethernet2 is up
+  Interface Address 10.10.10.1/24, instance 1, VRF default, Area 0.0.0.20
+  Network Type Broadcast, Cost: 10
+  Transmit Delay is 1 sec, State DR, Priority 1
+  Interface Speed: 1000 mbps
+  Designated Router is 192.168.0.38
+  No Backup Designated Router on this network
+  Timer intervals configured, Hello 10, Dead 40, Retransmit 5
+  Neighbor Count is 0
+  No authentication
+  Traffic engineering is disabled
+  TI-LFA protection is disabled
+Ethernet1 is up
+  Interface Address 192.168.0.38/30, instance 1, VRF default, Area 0.0.0.20
+  Network Type Broadcast, Cost: 10
+  Transmit Delay is 1 sec, State Backup DR, Priority 1
+  Interface Speed: 1000 mbps
+  Designated Router is 192.168.20.2
+  Backup Designated Router is 192.168.0.38
+  Timer intervals configured, Hello 10, Dead 40, Retransmit 5
+  Neighbor Count is 1
+  No authentication
+  Traffic engineering is disabled
+  TI-LFA protection is disabled

@@ -1,0 +1,4 @@
+interface Ethernet1
+   ipv6 ospf 1 area 0.0.0.0
+interface Ethernet2
+   ipv6 ospf 1 area 0.0.0.0

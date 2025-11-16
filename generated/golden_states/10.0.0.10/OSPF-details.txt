@@ -1,0 +1,12 @@
+interface Ethernet1
+   ipv6 ospf 1 area 0.0.0.0
+interface Ethernet2
+   ipv6 ospf 1 area 0.0.0.0
+router ospf 1
+   redistribute bgp
+   redistribute rip
+   network 192.168.0.28/30 area 0.0.0.10
+   max-lsa 12000
+router rip
+   redistribute ospf match internal
+   redistribute ospf match external

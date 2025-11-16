@@ -1,0 +1,5 @@
+BGP summary information for VRF default
+Router identifier 192.168.0.29, local AS number 444
+Neighbor Status Codes: m - Under maintenance
+  Neighbor    V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+  192.168.0.5 4 555               43        42    0    0 00:33:39 Estab   1      1      0

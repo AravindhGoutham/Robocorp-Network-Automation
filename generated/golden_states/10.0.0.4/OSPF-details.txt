@@ -1,0 +1,14 @@
+snmp-server enable traps ospf if-state-change
+snmp-server enable traps ospfv3 if-state-change
+interface Ethernet2
+   ipv6 ospf 1 area 0.0.0.0
+router ospf 1
+   redistribute connected
+   redistribute rip
+   network 192.168.0.20/30 area 0.0.0.0
+   max-lsa 12000
+ipv6 router ospf 1
+   router-id 1.1.1.1
+   redistribute connected
+router rip
+   redistribute ospf
